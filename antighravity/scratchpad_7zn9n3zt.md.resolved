@@ -1,0 +1,22 @@
+# Phase 3 Kanji App Verification
+
+## Plan
+- [x] Open http://localhost:8080/index.html
+- [x] Verify N5 Kanji details load
+- [x] Toggle Flashcard Mode
+    - [x] Meaning, Onyomi, Kunyomi metadata is hidden/blurred
+    - [ ] "Reveal Answer" button appears
+- [ ] Tap "Reveal Answer"
+    - [ ] Details become visible
+- [x] Toggle Flashcard Mode off
+- [ ] Star the current Kanji
+- [ ] Tap N4 navigation pill
+    - [ ] Wait for N4 Kanji details to load
+- [ ] Tap "⭐ Favorites" pill
+- [ ] Verify starred Kanji is displayed
+- [ ] Provide summary of functionality
+
+## Observations
+- App loaded successfully.
+- "火" (Fire) loaded as the first N5 Kanji.
+- Practice Mode successfully toggles and blurs the meanings/readings.

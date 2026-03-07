@@ -1,0 +1,29 @@
+# Goal Description
+Upgrade the Phase 2 JLPT app to "Phase 3" by implementing a JLPT Level Selector (N1-N5), a LocalStorage-backed "Favorites" system to save tough Kanji, and a Flashcard "Practice Mode" toggle that hides kanji meanings, readings, and vocabulary until the user chooses to reveal them.
+
+## Proposed Changes
+
+### Core Elements
+#### [MODIFY] index.html
+1. **Header Updates:** 
+   - Add a tabbed navigation bar for selecting JLPT levels (N5, N4, N3, N2, N1) and a "⭐ Favorites" tab.
+   - Add a neat CSS Toggle Switch for "Flashcard Mode".
+2. **Kanji Detail Card:**
+   - Add an interactive Star icon `★` next to the main Kanji character display.
+   - Wrap the meanings, readings, and vocabulary inside a container that can be dynamically hidden by a "Reveal Answer" overlay block.
+3. **JavaScript State & Logic:**
+   - Introduce `favorites` array synced via `localStorage.setItem('jlpt_favorites', ...)`.
+   - Update the API fetch URL to depend on the selected JLPT level: `https://kanjiapi.dev/v1/kanji/jlpt-${level}`.
+   - Implement `isFlashcardMode` logic to toggle CSS visibility of metadata containers without breaking layout flow.
+4. **CSS Styling:**
+   - Style the new Tabs and Toggle smoothly to fit the existing rounded, shadow-based card design without cluttering the mobile workspace.
+
+## Verification Plan
+
+### Browser Subagent Testing
+- We will deploy the app on a background local server (`python3 -m http.server`).
+- The Browser Subagent will:
+  - Verify tab switching from N5 to N4 actually fetches new content.
+  - Add a kanji to favorites, switch to the Favorites tab, and confirm the kanji is there. 
+  - Toggle "Flashcard Mode", verify the text content for meanings is hidden and the "Reveal Answer" button works correctly. 
+  - Check alignment across the new UI components.
