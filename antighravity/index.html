@@ -12,701 +12,356 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- HanziWriter library -->
+    <!-- HanziWriter (Stroke Animation & Quiz) -->
     <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    
+    <!-- Kuroshiro (Furigana Generator) -->
+    <script src="https://cdn.jsdelivr.net/npm/kuroshiro@1.2.0/dist/kuroshiro.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/kuroshiro-analyzer-kuromoji@1.1.0/dist/kuroshiro-analyzer-kuromoji.min.js"></script>
 
     <style>
         :root {
-            /* Color Palette */
+            /* Light Theme */
             --primary: #4f46e5;
             --primary-hover: #4338ca;
+            --header-bg: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --canvas-bg: #fafaf9;
+            --canvas-bg: #ffffff;
+            --canvas-grid: #e2e8f0;
             --star-color: #f59e0b;
             --star-inactive: #cbd5e1;
-
-            /* Sizing & Borders */
+            
             --radius-md: 12px;
             --radius-lg: 16px;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --transition-speed: 0.3s;
         }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        body.dark-theme {
+            /* Dark Theme */
+            --primary: #6366f1;
+            --primary-hover: #818cf8;
+            --header-bg: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --canvas-bg: #1e293b;
+            --canvas-grid: #334155;
+            --star-inactive: #475569;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
+            margin: 0; padding: 0;
             overscroll-behavior-y: none;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
         }
 
-        .app-container {
+        /* --- Hero Header --- */
+        .hero-header {
+            background: var(--header-bg);
+            color: white;
+            padding: 20px 16px;
+            border-radius: 0 0 24px 24px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 35vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
             max-width: 1100px;
-            padding: 20px 16px;
+        }
+
+        .app-title { font-size: 1.6rem; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+
+        .theme-toggle-btn {
+            background: rgba(255,255,255,0.2);
+            border: none; color: white;
+            width: 40px; height: 40px; border-radius: 50%;
+            font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Search Bar */
+        .search-container {
             display: flex;
-            flex-direction: column;
-            gap: 24px;
-            position: relative;
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 999px;
+            padding: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* --- Global Header & Controls --- */
-        header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 20px;
+            font-size: 1rem;
+            color: var(--text-main);
+            outline: none;
         }
 
-        .app-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--primary);
-            letter-spacing: -0.02em;
-            text-align: center;
+        .search-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 600;
         }
 
-        /* Nav Pills (Level Selector + Favorites) */
-        .nav-pills {
+        /* Top Nav Menu */
+        .top-nav {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
-            background: var(--card-bg);
-            padding: 6px;
-            border-radius: 999px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
         }
 
-        .nav-pill {
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 0.9rem;
+        .nav-item {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 16px;
+            border-radius: 12px;
             font-weight: 600;
-            color: var(--text-muted);
-            border: none;
-            background: transparent;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
-        }
-
-        .nav-pill.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
-        }
-
-        /* Settings Bar (Progress + Flashcard Toggle) */
-        .settings-bar {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 8px;
-        }
-
-        .progress-badge {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary);
-            background: #e0e7ff;
-            padding: 6px 14px;
-            border-radius: 9999px;
-        }
-
-        /* Flashcard Toggle */
-        .toggle-container {
+            backdrop-filter: blur(5px);
             display: flex;
             align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .toggle-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            background-color: var(--border-color);
-            border-radius: 999px;
-            transition: background-color 0.3s;
-        }
-
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 20px;
-            height: 20px;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        .toggle-container.active .toggle-switch {
-            background-color: var(--primary);
-        }
-
-        .toggle-container.active .toggle-switch::after {
-            transform: translateX(20px);
-        }
-
-        /* --- Layout Grid --- */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: relative;
-        }
-
-        @media (min-width: 860px) {
-            .app-container {
-                padding: 40px 24px;
-            }
-
-            .app-title {
-                font-size: 2.25rem;
-            }
-
-            .nav-pills {
-                padding: 8px;
-                gap: 12px;
-            }
-
-            .nav-pill {
-                font-size: 1rem;
-                padding: 10px 20px;
-            }
-
-            .main-content {
-                display: grid;
-                grid-template-columns: 360px 1fr;
-                grid-template-rows: auto auto;
-                gap: 24px;
-                align-items: flex-start;
-            }
-
-            .card-kanji {
-                grid-column: 1;
-                grid-row: 1;
-            }
-
-            .card-practice {
-                grid-column: 2;
-                grid-row: 1 / span 2;
-                position: sticky;
-                top: 24px;
-            }
-
-            .card-vocab {
-                grid-column: 1;
-                grid-row: 2;
-            }
-        }
-
-        /* Generic Card Styles */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-md);
-        }
-
-        /* --- Kanji Info Card --- */
-        .kanji-hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            margin-bottom: 24px;
-        }
-
-        .kanji-char-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .kanji-char-display {
-            font-size: 6rem;
-            line-height: 1.1;
-            font-weight: 500;
-            margin: 0;
-            color: var(--text-main);
-        }
-
-        /* Star Button Custom CSS */
-        .btn-star {
-            position: absolute;
-            top: 0;
-            right: -40px;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: var(--star-inactive);
-            cursor: pointer;
-            transition: transform 0.2s, color 0.2s;
-            padding: 8px;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-star:hover {
-            transform: scale(1.15);
-        }
-
-        .btn-star.starred {
-            color: var(--star-color);
-            animation: starPop 0.3s ease-out;
-        }
-
-        @keyframes starPop {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.3);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Flashcard Hiding System */
-        .info-content {
-            transition: opacity 0.3s ease, filter 0.3s ease;
-        }
-
-        .flashcard-mode .info-content {
-            opacity: 0.1;
-            filter: blur(8px);
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .reveal-container {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 5;
-            transition: opacity 0.3s;
-        }
-
-        .flashcard-mode .reveal-container {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .btn-reveal {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .btn-reveal:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        /* Kanji Data Display */
-        .kanji-meanings {
-            font-size: 1.15rem;
-            color: var(--text-main);
-            font-weight: 600;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        .readings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            background: var(--bg-color);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-
-        .reading-label {
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-            margin-bottom: 6px;
-        }
-
-        .reading-value {
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--primary);
-        }
-
-        /* --- Vocabulary Card --- */
-        .card-vocab {
-            position: relative;
-        }
-
-        .card-header {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: 0 0 16px 0;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .vocab-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .vocab-item {
-            background: var(--bg-color);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            display: flex;
-            flex-direction: column;
             gap: 6px;
-            border: 1px solid transparent;
         }
 
-        .vocab-word-row {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
-
-        .vocab-kanji {
-            font-size: 1.35rem;
-            font-weight: 700;
-        }
-
-        .vocab-reading {
-            font-size: 0.95rem;
-            color: var(--primary);
-            font-weight: 600;
-            background: #e0e7ff;
-            padding: 2px 8px;
-            border-radius: 6px;
-        }
-
-        .vocab-meaning {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        /* --- Practice Area Card --- */
-        .workspaces-container {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            margin-bottom: 30px;
-        }
-
-        @media (min-width: 640px) {
-            .workspaces-container {
-                flex-direction: row;
-                justify-content: center;
-                gap: 24px;
-            }
-        }
-
-        .workspace-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .workspace-title {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .canvas-box {
-            width: 250px;
-            height: 250px;
-            background: var(--canvas-bg);
-            border: 2px dashed #cbd5e1;
-            border-radius: var(--radius-md);
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
-            transition: border-color 0.2s ease;
-        }
-
-        .canvas-box:hover {
-            border-color: var(--primary);
-        }
-
-        .canvas-box canvas,
-        .canvas-box svg {
-            display: block;
-            touch-action: none;
-        }
-
-        .btn-action {
-            background: transparent;
-            color: var(--text-muted);
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            border-radius: 8px;
-            font-weight: 600;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            max-width: 250px;
-        }
-
-        .btn-action:hover {
-            background: var(--bg-color);
-            color: var(--text-main);
-            border-color: #cbd5e1;
-        }
-
-        /* --- Navigation Controls --- */
-        .controls-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .btn {
-            padding: 14px 24px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: center;
-        }
-
-        .btn:active:not(:disabled) {
-            transform: scale(0.98);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: var(--primary-hover);
-            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
-        }
-
-        .btn-secondary {
+        .nav-item.active, .nav-item:hover {
             background: white;
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
+            color: var(--primary);
         }
 
-        .btn-secondary:hover:not(:disabled) {
-            background: var(--bg-color);
-            border-color: #cbd5e1;
+        /* Nav Pills (Level Selector) */
+        .nav-pills {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+            background: rgba(0,0,0,0.2); padding: 6px; border-radius: 999px;
+        }
+        .nav-pill {
+            padding: 6px 14px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+            color: white; border: none; background: transparent; cursor: pointer;
+        }
+        .nav-pill.active { background: var(--primary); color: white; }
+        .quiz-pill { background: #10b981 !important; color: white !important; }
+
+        /* Main Content Container */
+        .app-container {
+            width: 100%; max-width: 1100px; margin: 0 auto;
+            padding: 24px 16px; display: flex; flex-direction: column; gap: 24px;
         }
 
-        /* Loading State Overlay */
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            opacity: 1;
-            transition: opacity 0.4s ease;
+        /* Settings Bar */
+        .settings-bar {
+            display: flex; width: 100%; justify-content: space-between; align-items: center;
+            padding: 0 8px; margin-bottom: 10px;
+        }
+        .progress-badge {
+            font-size: 0.85rem; font-weight: 600; color: white;
+            background: var(--primary); padding: 6px 14px; border-radius: 9999px;
         }
 
-        .overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
+        /* Layout Grid */
+        .main-content { display: flex; flex-direction: column; gap: 20px; }
+        @media (min-width: 860px) {
+            .main-content { display: grid; grid-template-columns: 360px 1fr; grid-template-rows: auto auto; align-items: flex-start; }
+            .card-kanji { grid-column: 1; grid-row: 1; }
+            .card-practice { grid-column: 2; grid-row: 1 / span 2; position: sticky; top: 24px; }
+            .card-vocab { grid-column: 1; grid-row: 2; }
         }
 
-        .spinner {
-            width: 54px;
-            height: 54px;
-            border: 5px solid #e0e7ff;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s infinite cubic-bezier(0.55, 0.15, 0.45, 0.85);
+        /* Generic Card */
+        .card {
+            background: var(--card-bg); border-radius: var(--radius-lg); padding: 24px;
+            box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);
         }
 
-        .loading-text {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
+        /* Kanji Display */
+        .kanji-hero { display: flex; flex-direction: column; align-items: center; position: relative; margin-bottom: 24px; }
+        .kanji-char-display { font-size: 6rem; line-height: 1.1; font-weight: 500; margin: 0; color: var(--text-main); }
+        .btn-star { position: absolute; top: 0; right: -20px; background: none; border: none; font-size: 2rem; color: var(--star-inactive); cursor: pointer; }
+        .btn-star.starred { color: var(--star-color); }
+        .kanji-meanings { font-size: 1.15rem; color: var(--text-main); font-weight: 600; margin-top: 8px; text-align: center; }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        .btn-tts { background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px; color: var(--primary); }
+        .readings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: var(--bg-color); padding: 16px; border-radius: var(--radius-md); text-align: center; }
+        .reading-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .reading-value { font-size: 1.05rem; font-weight: 500; color: var(--primary); }
 
-        /* Empty States */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-            font-weight: 500;
-            background: var(--bg-color);
-            border-radius: var(--radius-md);
-            border: 1px dashed var(--border-color);
+        /* Practice Area */
+        .workspaces-container { display: flex; flex-direction: column; gap: 32px; margin-bottom: 30px; }
+        @media (min-width: 640px) { .workspaces-container { flex-direction: row; justify-content: center; gap: 24px; } }
+        .workspace-col { display: flex; flex-direction: column; align-items: center; gap: 12px; flex: 1; }
+        .workspace-title { font-size: 0.9rem; color: var(--text-muted); font-weight: 700; margin: 0; }
+        .canvas-box {
+            width: 250px; height: 250px; background-color: var(--canvas-bg); border: 2px dashed var(--border-color); border-radius: var(--radius-md);
+            display: flex; justify-content: center; align-items: center; position: relative;
+            background-image: linear-gradient(to right, transparent 49%, var(--canvas-grid) 49%, var(--canvas-grid) 51%, transparent 51%), linear-gradient(to bottom, transparent 49%, var(--canvas-grid) 49%, var(--canvas-grid) 51%, transparent 51%);
         }
+        .canvas-box canvas, .canvas-box svg { touch-action: none; display: block; }
+        .btn-action { background: transparent; color: var(--text-main); padding: 10px 16px; border-radius: 8px; font-weight: 600; border: 1px solid var(--border-color); cursor: pointer; width: 100%; max-width: 250px; }
+        .btn-action.hint-btn { background: #fef08a; border-color: #fde047; color: #854d0e; }
+        .btn-action.test-btn { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+        
+        /* Quiz & Sections */
+        .section-container { display: none; max-width: 700px; margin: 0 auto; width: 100%; }
+        .active-section { display: block; }
+        .quiz-option {
+            background: var(--card-bg); border: 2px solid var(--border-color); color: var(--text-main);
+            padding: 16px; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 10px;
+        }
+        .quiz-option:hover { border-color: var(--primary); }
+        .quiz-option.correct { background: #10b981; border-color: #059669; color: white; }
+        .quiz-option.wrong { background: #ef4444; border-color: #dc2626; color: white; }
+
+        /* Dynamic Reading / Listening Passages */
+        .passage-box {
+            font-size: 1.4rem; line-height: 2; padding: 20px; background: var(--bg-color);
+            border-radius: var(--radius-md); margin-bottom: 20px; border: 1px solid var(--border-color);
+        }
+        ruby { ruby-position: over; }
+        rt { color: var(--primary); font-size: 0.55em; font-weight: bold; }
+        .english-translation { font-size: 1rem; color: var(--text-muted); margin-top: 15px; display: none; padding-top: 15px; border-top: 1px dashed var(--border-color); }
+
+        /* Furigana Generator */
+        .furigana-input { width: 100%; height: 120px; padding: 15px; font-size: 1.1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-main); margin-bottom: 15px; font-family: inherit; resize: vertical; }
+        .furigana-output { min-height: 100px; padding: 20px; background: var(--bg-color); border-radius: var(--radius-md); font-size: 1.4rem; line-height: 2.2; border: 1px solid var(--border-color); }
+
+        /* Search Results */
+        .search-result-item { background: var(--bg-color); padding: 15px; border-radius: var(--radius-md); margin-bottom: 15px; border: 1px solid var(--border-color); }
+        .search-word { font-size: 1.6rem; font-weight: bold; color: var(--primary); }
+        .search-reading { font-size: 1rem; color: var(--text-muted); margin-bottom: 10px; }
+        .search-meaning { font-size: 1.1rem; font-weight: 500; }
+
+        /* Loading Spinner */
+        .overlay { position: fixed; inset: 0; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0.95; transition: opacity 0.3s; }
+        .overlay.hidden { opacity: 0; pointer-events: none; }
+        .spinner { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s infinite linear; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
     </style>
 </head>
 
 <body>
 
-    <!-- Loading Overlay -->
     <div id="loading-overlay" class="overlay">
         <div id="spinner" class="spinner"></div>
-        <div id="loading-text" class="loading-text">Loading Data...</div>
+        <div id="loading-text" style="font-weight: 600; font-size: 1.1rem; margin-top: 20px;">Loading data...</div>
     </div>
 
-    <div class="app-container">
-
-        <!-- Header & Nav -->
-        <header>
+    <!-- Top Hero Header (40% Viewport Area) -->
+    <header class="hero-header">
+        <div class="header-top">
             <h1 class="app-title">JLPT Kanji Mastery</h1>
-            <nav class="nav-pills" id="level-nav">
-                <button class="nav-pill active" data-level="5">N5</button>
-                <button class="nav-pill" data-level="4">N4</button>
-                <button class="nav-pill" data-level="3">N3</button>
-                <button class="nav-pill" data-level="2">N2</button>
-                <button class="nav-pill" data-level="1">N1</button>
-                <button class="nav-pill" data-level="favorites">⭐ Favorites</button>
-            </nav>
+            <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
+        </div>
 
-            <div class="settings-bar">
-                <div id="progress-indicator" class="progress-badge">0 / 0</div>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search words (English/Japanese)...">
+            <button id="btn-search" class="search-btn">Search 🔍</button>
+        </div>
 
-                <div class="toggle-container" id="flashcard-toggle">
-                    <span class="toggle-label">Practice Mode</span>
-                    <div class="toggle-switch"></div>
-                </div>
-            </div>
-        </header>
+        <nav class="top-nav" id="top-nav">
+            <div class="nav-item active" data-view="kanji">字 Kanji</div>
+            <div class="nav-item" data-view="reading">読 Reading</div>
+            <div class="nav-item" data-view="listening">聴 Listening</div>
+            <div class="nav-item" data-view="furigana">✍️ Furigana Maker</div>
+        </nav>
 
-        <div class="main-content" id="main-content-area">
+        <nav class="nav-pills" id="level-nav">
+            <button class="nav-pill active" data-level="5">N5</button>
+            <button class="nav-pill" data-level="4">N4</button>
+            <button class="nav-pill" data-level="3">N3</button>
+            <button class="nav-pill" data-level="2">N2</button>
+            <button class="nav-pill" data-level="1">N1</button>
+            <button class="nav-pill" data-level="favorites">⭐ Favorites</button>
+            <button class="nav-pill quiz-pill" id="btn-start-quiz">Start Quiz 🎯</button>
+        </nav>
+    </header>
 
-            <!-- Kanji Details -->
+    <div class="app-container">
+        
+        <div class="settings-bar" id="settings-bar">
+            <div id="progress-indicator" class="progress-badge">0 / 0</div>
+            <!-- Flashcard mode temporarily hidden to keep UI clean -->
+            <button class="btn-action" style="max-width: 150px; padding: 6px; display:none;" id="flashcard-toggle">Flashcard Mode</button>
+        </div>
+
+        <!-- 1. MAIN KANJI STUDY CONTENT -->
+        <div class="main-content section-container active-section" id="kanji-container">
+            
             <div class="card card-kanji">
                 <div class="kanji-hero">
                     <div class="kanji-char-wrapper">
                         <h2 id="kanji-char" class="kanji-char-display">-</h2>
-                        <button id="btn-star" class="btn-star" aria-label="Add to favorites">★</button>
+                        <button id="btn-star" class="btn-star">★</button>
                     </div>
-
                     <div class="info-content">
                         <div id="kanji-meanings" class="kanji-meanings">-</div>
                     </div>
                 </div>
 
-                <!-- Information wrapped for flashcard hiding -->
-                <div style="position: relative;">
-                    <div class="info-content readings-grid">
-                        <div>
-                            <div class="reading-label">Onyomi</div>
-                            <div id="kanji-onyomi" class="reading-value">-</div>
+                <div class="info-content readings-grid">
+                    <div>
+                        <div class="reading-label">Onyomi</div>
+                        <div style="display: flex; justify-content:center; align-items:center; gap:5px;">
+                            <span id="kanji-onyomi" class="reading-value">-</span>
+                            <button class="btn-tts" id="tts-on">🔊</button>
                         </div>
-                        <div>
-                            <div class="reading-label">Kunyomi</div>
-                            <div id="kanji-kunyomi" class="reading-value">-</div>
+                    </div>
+                    <div>
+                        <div class="reading-label">Kunyomi</div>
+                        <div style="display: flex; justify-content:center; align-items:center; gap:5px;">
+                            <span id="kanji-kunyomi" class="reading-value">-</span>
+                            <button class="btn-tts" id="tts-kun">🔊</button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Practice Canvas & Animation -->
             <div class="card card-practice">
-                <h2 class="card-header">Practice Area</h2>
-
+                <h2 style="margin:0 0 15px 0;">Practice Area</h2>
                 <div class="workspaces-container">
-                    <!-- Stroke Order -->
                     <div class="workspace-col">
-                        <h3 class="workspace-title">Stroke Guide</h3>
+                        <h3 class="workspace-title">Stroke Guide / Test</h3>
                         <div id="hanzi-writer-target" class="canvas-box"></div>
-                        <button id="btn-replay" class="btn-action">Replay Animation</button>
+                        <div style="display: flex; gap: 10px; width: 100%;">
+                            <button id="btn-hint" class="btn-action hint-btn">Show Hint 💡</button>
+                            <button id="btn-test-stroke" class="btn-action test-btn">Check Strokes ✍️</button>
+                        </div>
+                        <p id="quiz-status" style="font-size: 0.8rem; color: var(--primary); margin: 0;"></p>
                     </div>
-
-                    <!-- User Canvas -->
                     <div class="workspace-col">
                         <h3 class="workspace-title">Your Turn</h3>
                         <div class="canvas-box">
@@ -715,420 +370,705 @@
                         <button id="btn-clear" class="btn-action">Clear Canvas</button>
                     </div>
                 </div>
-
-                <!-- Navigation Controls -->
-                <div class="controls-row">
-                    <button id="btn-prev" class="btn btn-secondary" disabled>&larr; Previous</button>
-                    <button id="btn-next" class="btn btn-primary">Next Kanji &rarr;</button>
-                </div>
-            </div>
-
-            <!-- Vocabulary Section -->
-            <div class="card card-vocab">
-                <h2 class="card-header">Vocabulary Words</h2>
-                <div style="position: relative; min-height: 150px;">
-                    <!-- Wrapper for Flashcard hiding -->
-                    <div class="info-content">
-                        <ul id="vocab-list" class="vocab-list">
-                            <!-- Injected dynamically -->
-                        </ul>
-                    </div>
-
-                    <!-- Flashcard Reveal Overlay -->
-                    <div class="reveal-container" id="reveal-container">
-                        <button class="btn-reveal" id="btn-reveal">Reveal Answer</button>
-                    </div>
+                <div style="display: flex; gap: 15px;">
+                    <button id="btn-prev" class="btn-action" disabled>&larr; Previous</button>
+                    <button id="btn-next" class="btn-action" style="background: var(--primary); color: white;">Next Kanji &rarr;</button>
                 </div>
             </div>
 
         </div>
+
+        <!-- 2. READING CONTAINER -->
+        <div class="card section-container" id="reading-container">
+            <h2 style="margin-top:0;">Reading N<span id="read-lvl"></span></h2>
+            <div id="reading-content">
+                <!-- Data injected dynamically -->
+            </div>
+            <button class="btn-action" style="background: var(--primary); color: white; margin-top: 20px;" onclick="loadDynamicReadingListening('reading')">Next Sentence</button>
+        </div>
+
+        <!-- 3. LISTENING CONTAINER -->
+        <div class="card section-container" id="listening-container">
+            <h2 style="margin-top:0;">Listening N<span id="listen-lvl"></span></h2>
+            <div id="listening-content">
+                <!-- Data injected dynamically -->
+            </div>
+            <button class="btn-action" style="background: var(--primary); color: white; margin-top: 20px;" onclick="loadDynamicReadingListening('listening')">Next Audio</button>
+        </div>
+
+        <!-- 4. FURIGANA GENERATOR -->
+        <div class="card section-container" id="furigana-container">
+            <h2 style="margin-top:0;">✍️ Auto-Furigana Generator</h2>
+            <p style="color: var(--text-muted);">Paste any Japanese text here to generate furigana (hiragana).</p>
+            <textarea id="furi-input" class="furigana-input" placeholder="Enter Japanese text here (e.g., 私は毎日水を飲みます)..."></textarea>
+            <button id="btn-generate-furi" class="btn-action" style="background: var(--primary); color: white; max-width: 100%; margin-bottom: 20px;">Generate Furigana</button>
+            
+            <h3 style="margin: 0 0 10px 0;">Result:</h3>
+            <div id="furi-output" class="furigana-output">Result will appear here...</div>
+        </div>
+
+        <!-- 5. SEARCH RESULTS -->
+        <div class="card section-container" id="search-container">
+            <h2 style="margin-top:0;">🔍 Search Results</h2>
+            <div id="search-results-area">
+                <!-- Search results injected here -->
+            </div>
+        </div>
+
+        <!-- 6. QUIZ CONTAINER -->
+        <div class="card section-container" id="quiz-container">
+            <div id="quiz-active-area">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <h2 style="margin:0;">Quiz Mode</h2>
+                    <h3 id="quiz-qnum" style="margin:0; color: var(--primary);">Question 1/5</h3>
+                </div>
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div id="quiz-sentence" class="passage-box">
+                        <span id="quiz-sentence-text"></span>
+                        <button id="quiz-audio-btn" class="btn-tts">🔊</button>
+                    </div>
+                    <p style="color: var(--text-muted);">How do you read the highlighted word?</p>
+                </div>
+                <div id="quiz-options"></div>
+            </div>
+            <div id="quiz-result-area" style="display:none; text-align: center;">
+                <h2>Quiz Complete!</h2>
+                <h1 id="quiz-final-score" style="font-size: 4rem; color: var(--primary); margin: 10px 0;">4/5</h1>
+                <p id="quiz-feedback" style="color: var(--text-muted); margin-bottom: 20px;"></p>
+                <button class="btn-action" id="btn-end-quiz" style="background: var(--primary); color: white;">Go Back</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // State
-        let currentLevel = '5'; // '5', '4', '3', '2', '1', or 'favorites'
+        // --- State Variables ---
+        let currentLevel = '5';
         let kanjiList = [];
         let currentIndex = -1;
-        let hanziWriterIntance = null;
-        let isFlashcardMode = false;
-        let isRevealed = false;
-
-        // Load favorites from local storage
+        let hanziWriterInstance = null;
         let favorites = JSON.parse(localStorage.getItem('jlpt_favorites') || '[]');
+        let isDarkMode = localStorage.getItem('jlpt_theme') === 'dark';
+        let kuroshiroInstance = null;
+        let isFuriganaReady = false;
 
-        // DOM Elements
+        // Quiz / Dynamic Data State
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let currentAudioObj = null;
+
+        // --- DOM Elements ---
         const overlay = document.getElementById('loading-overlay');
         const overlayText = document.getElementById('loading-text');
-        const spinner = document.getElementById('spinner');
-        const mainContentArea = document.getElementById('main-content-area');
+        const settingsBar = document.getElementById('settings-bar');
 
-        const kanjiCharEl = document.getElementById('kanji-char');
-        const btnStar = document.getElementById('btn-star');
-        const meaningsEl = document.getElementById('kanji-meanings');
-        const onyomiEl = document.getElementById('kanji-onyomi');
-        const kunyomiEl = document.getElementById('kanji-kunyomi');
-        const progressEl = document.getElementById('progress-indicator');
-        const vocabListEl = document.getElementById('vocab-list');
+        const containers = {
+            kanji: document.getElementById('kanji-container'),
+            reading: document.getElementById('reading-container'),
+            listening: document.getElementById('listening-container'),
+            furigana: document.getElementById('furigana-container'),
+            search: document.getElementById('search-container'),
+            quiz: document.getElementById('quiz-container')
+        };
 
-        const btnPrev = document.getElementById('btn-prev');
-        const btnNext = document.getElementById('btn-next');
-        const btnClear = document.getElementById('btn-clear');
-        const btnReplay = document.getElementById('btn-replay');
+        // --- Theme ---
+        if (isDarkMode) { document.body.classList.add('dark-theme'); document.getElementById('theme-toggle').textContent = '☀️'; }
+        document.getElementById('theme-toggle').addEventListener('click', (e) => {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-theme', isDarkMode);
+            e.target.textContent = isDarkMode ? '☀️' : '🌙';
+            localStorage.setItem('jlpt_theme', isDarkMode ? 'dark' : 'light');
+            if(hanziWriterInstance) updateDrawingColors();
+        });
 
-        const flashcardToggle = document.getElementById('flashcard-toggle');
-        const btnReveal = document.getElementById('btn-reveal');
-        const levelNavBtns = document.querySelectorAll('.nav-pill');
+        // --- Utils ---
+        function showLoading(text) { 
+            overlayText.textContent = text; 
+            document.getElementById('spinner').style.display = 'block'; 
+            overlay.classList.remove('hidden'); 
+        }
+        function hideLoading() { 
+            overlay.classList.add('hidden'); 
+        }
+        function speak(text) {
+            if (!text || text === '-') return;
+            const u = new SpeechSynthesisUtterance(text.replace(/-/g, '').split(',')[0].trim());
+            u.lang = 'ja-JP'; u.rate = 0.9;
+            window.speechSynthesis.speak(u);
+        }
+        function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 
-        // Canvas Setup
-        const canvas = document.getElementById('drawing-canvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        ctx.lineWidth = 10;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.strokeStyle = '#0f172a';
+        document.getElementById('tts-on').addEventListener('click', () => speak(document.getElementById('kanji-onyomi').textContent));
+        document.getElementById('tts-kun').addEventListener('click', () => speak(document.getElementById('kanji-kunyomi').textContent));
 
-        // Utility: Shuffle
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+        // --- Timeout Wrapper for APIs (Safety feature) ---
+        async function fetchWithTimeout(resource, options = {}) {
+            const { timeout = 8000 } = options;
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            const response = await fetch(resource, { ...options, signal: controller.signal });
+            clearTimeout(id);
+            return response;
         }
 
-        // --- App Initialization & Data Fetching ---
-
-        async function fetchLevelData(level) {
+        // --- Helper for Tatoeba API to bypass CORS & Tracking Blockers ---
+        async function fetchTatoeba(query) {
             try {
-                showLoading(`Fetching ${level === 'favorites' ? 'Favorites' : 'JLPT N' + level}...`, true);
-
-                if (level === 'favorites') {
-                    kanjiList = [...favorites];
-                    if (kanjiList.length === 0) {
-                        renderEmptyFavorites();
-                        hideLoading();
-                        return;
-                    }
-                } else {
-                    const response = await fetch(`https://kanjiapi.dev/v1/kanji/jlpt-${level}`);
-                    if (!response.ok) throw new Error('API fetch failed');
-                    kanjiList = await response.json();
-                    shuffleArray(kanjiList);
+                const tatUrl = `https://tatoeba.org/en/api_v0/search?from=jpn&to=eng&query=${encodeURIComponent(query)}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(tatUrl)}`;
+                const res = await fetchWithTimeout(proxyUrl, { timeout: 10000 });
+                const data = await res.json();
+                if(data && data.contents) {
+                    return JSON.parse(data.contents);
                 }
-
-                mainContentArea.style.display = 'grid'; // Restore grid if hidden by empty state
-                if (window.innerWidth < 860) mainContentArea.style.display = 'flex'; // Fix responsive display
-
-                if (kanjiList && kanjiList.length > 0) {
-                    await loadKanjiData(0);
-                }
-            } catch (err) {
-                console.error(err);
-                showError('Failed to load Kanji list. API may be down.');
+            } catch(e) {
+                console.warn("Tatoeba fetch error or timeout", e);
             }
+            return null;
         }
 
-        async function loadKanjiData(index) {
-            if (index < 0 || index >= kanjiList.length) return;
+        // --- Top Navigation Handler ---
+        function switchView(viewName) {
+            document.querySelectorAll('.top-nav .nav-item').forEach(nav => nav.classList.remove('active'));
+            const activeNav = document.querySelector(`.top-nav .nav-item[data-view="${viewName}"]`);
+            if(activeNav) activeNav.classList.add('active');
 
-            currentIndex = index;
-            const targetKanji = kanjiList[currentIndex];
+            Object.values(containers).forEach(c => c.classList.remove('active-section'));
+            if(containers[viewName]) containers[viewName].classList.add('active-section');
 
-            updateNavigation();
-            updateStarUI(targetKanji);
-            resetFlashcardState();
+            if(currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
+            settingsBar.style.display = (viewName === 'kanji') ? 'flex' : 'none';
 
-            showLoading(`Loading details for ${targetKanji}`, false);
-
-            try {
-                // Fetch Details and Words
-                const [detailsResponse, wordsResponse] = await Promise.all([
-                    fetch(`https://kanjiapi.dev/v1/kanji/${targetKanji}`),
-                    fetch(`https://kanjiapi.dev/v1/words/${targetKanji}`)
-                ]);
-
-                if (!detailsResponse.ok) throw new Error('Details failed');
-
-                const details = await detailsResponse.json();
-
-                let words = [];
-                if (wordsResponse.ok) {
-                    const allWords = await wordsResponse.json();
-                    let commonWords = allWords.filter(w => w.variants.some(v => v.priorities && v.priorities.length > 0));
-                    if (commonWords.length === 0) commonWords = allWords;
-                    words = commonWords.slice(0, 4);
-                }
-
-                renderKanjiDetails(details);
-                renderVocabulary(words);
-                setupHanziWriter(targetKanji);
-                clearCanvas();
-                hideLoading();
-
-            } catch (error) {
-                console.error('Error fetching data for', targetKanji, error);
-
-                // If the kanji isn't in kanjiapi.dev (e.g user inputted corrupt localStorage)
-                if (currentLevel === 'favorites') {
-                    removeFavorite(targetKanji);
-                    loadKanjiData(currentIndex); // Try next
-                } else {
-                    showError('Failed to load character details.');
-                }
+            if(viewName === 'reading' || viewName === 'listening') {
+                document.getElementById('read-lvl').textContent = currentLevel;
+                document.getElementById('listen-lvl').textContent = currentLevel;
+                loadDynamicReadingListening(viewName);
             }
+            if(viewName === 'furigana' && !isFuriganaReady) initKuroshiro();
         }
 
-        // --- Rendering UI ---
+        document.querySelectorAll('.top-nav .nav-item').forEach(item => {
+            item.addEventListener('click', () => switchView(item.dataset.view));
+        });
 
-        function renderKanjiDetails(data) {
-            kanjiCharEl.textContent = data.kanji;
-            meaningsEl.textContent = data.meanings.slice(0, 3).join(', ') || '-';
-            onyomiEl.textContent = data.on_readings.length ? data.on_readings.join(', ') : '-';
-            kunyomiEl.textContent = data.kun_readings.length ? data.kun_readings.join(', ') : '-';
-        }
-
-        function renderVocabulary(words) {
-            if (!words || words.length === 0) {
-                vocabListEl.innerHTML = `<li class="vocab-item"><div class="vocab-meaning">No common vocabulary available.</div></li>`;
-                return;
-            }
-
-            vocabListEl.innerHTML = words.map(word => {
-                const variant = word.variants[0];
-                const meaning = word.meanings[0].glosses.join(', ');
-                return `
-                    <li class="vocab-item">
-                        <div class="vocab-word-row">
-                            <span class="vocab-kanji">${variant.written}</span>
-                            <span class="vocab-reading">${variant.pronounced}</span>
-                        </div>
-                        <div class="vocab-meaning">${meaning}</div>
-                    </li>
-                `;
-            }).join('');
-        }
-
-        function renderEmptyFavorites() {
-            mainContentArea.style.display = 'block';
-            mainContentArea.innerHTML = `
-                <div class="empty-state">
-                    <h3>No Favorites Yet!</h3>
-                    <p style="margin-top: 10px;">Go practice other levels and tap the ★ icon to save kanji you want to review.</p>
-                </div>
-            `;
-            progressEl.textContent = `0 / 0`;
-        }
-
-        function setupHanziWriter(kanji) {
-            if (!hanziWriterIntance) {
-                hanziWriterIntance = HanziWriter.create('hanzi-writer-target', kanji, {
-                    width: 250, height: 250, padding: 10, showOutline: true,
-                    strokeAnimationSpeed: 1.5, delayBetweenStrokes: 150, delayBetweenLoops: 1500,
-                    strokeColor: '#4f46e5', radicalColor: '#10b981', outlineColor: '#cbd5e1'
-                });
-                hanziWriterIntance.loopCharacterAnimation();
-            } else {
-                hanziWriterIntance.setCharacter(kanji).then(() => {
-                    hanziWriterIntance.loopCharacterAnimation();
-                });
-            }
-        }
-
-        // --- Navigation & State Updates ---
-
-        function updateNavigation() {
-            progressEl.textContent = `${currentIndex + 1} / ${kanjiList.length}`;
-            btnPrev.disabled = currentIndex === 0;
-        }
-
-        // --- Favorites (LocalStorage) Logic ---
-
-        function updateStarUI(kanji) {
-            if (favorites.includes(kanji)) {
-                btnStar.classList.add('starred');
-                btnStar.innerHTML = '★';
-            } else {
-                btnStar.classList.remove('starred');
-                btnStar.innerHTML = '☆';
-            }
-        }
-
-        function toggleFavorite() {
-            if (currentIndex < 0 || kanjiList.length === 0) return;
-            const currentKanji = kanjiList[currentIndex];
-
-            if (favorites.includes(currentKanji)) {
-                removeFavorite(currentKanji);
-            } else {
-                favorites.push(currentKanji);
-                updateStarUI(currentKanji);
-                localStorage.setItem('jlpt_favorites', JSON.stringify(favorites));
-            }
-        }
-
-        function removeFavorite(kanji) {
-            favorites = favorites.filter(k => k !== kanji);
-            localStorage.setItem('jlpt_favorites', JSON.stringify(favorites));
-            updateStarUI(kanji);
-
-            // If we are currently in Favorites mode, remove from local list and jump to next
-            if (currentLevel === 'favorites') {
-                kanjiList = [...favorites];
-                if (kanjiList.length === 0) {
-                    renderEmptyFavorites();
-                } else {
-                    // Adjust index if we removed the last item
-                    if (currentIndex >= kanjiList.length) currentIndex = 0;
-                    loadKanjiData(currentIndex);
-                }
-            }
-        }
-
-        // --- Flashcard Mode Logic ---
-
-        function toggleFlashcardMode() {
-            isFlashcardMode = !isFlashcardMode;
-            flashcardToggle.classList.toggle('active', isFlashcardMode);
-
-            if (isFlashcardMode) {
-                document.body.classList.add('flashcard-mode');
-                isRevealed = false;
-            } else {
-                document.body.classList.remove('flashcard-mode');
-                isRevealed = true;
-            }
-        }
-
-        function resetFlashcardState() {
-            // When moving to a next kanji, if flashcard mode is on, hide it again.
-            if (isFlashcardMode) {
-                document.body.classList.add('flashcard-mode');
-                isRevealed = false;
-            }
-        }
-
-        function revealAnswer() {
-            if (!isFlashcardMode) return;
-            isRevealed = true;
-            document.body.classList.remove('flashcard-mode');
-        }
-
-        // --- Loading Utils ---
-        function showLoading(text, showSpinner = false) {
-            overlayText.textContent = text;
-            spinner.style.display = showSpinner ? 'block' : 'none';
-            overlay.classList.remove('hidden');
-        }
-
-        function hideLoading() {
-            overlay.classList.add('hidden');
-        }
-
-        function showError(msg) {
-            overlayText.textContent = msg;
-            spinner.style.display = 'none';
-            overlay.classList.remove('hidden');
-        }
-
-        // --- Canvas Drawing Logic ---
-        function getCanvasPosition(e) {
-            const rect = canvas.getBoundingClientRect();
-            let x = e.touches ? e.touches[0].clientX : e.clientX;
-            let y = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: x - rect.left, y: y - rect.top };
-        }
-
-        function handleStart(e) {
-            if (e.cancelable) e.preventDefault();
-            isDrawing = true;
-            const pos = getCanvasPosition(e);
-            lastX = pos.x; lastY = pos.y;
-            ctx.beginPath();
-            ctx.arc(lastX, lastY, ctx.lineWidth / 2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-        }
-
-        function handleMove(e) {
-            if (e.cancelable) e.preventDefault();
-            if (!isDrawing) return;
-            const pos = getCanvasPosition(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-            lastX = pos.x; lastY = pos.y;
-        }
-
-        function handleEnd(e) {
-            if (e && e.cancelable) e.preventDefault();
-            isDrawing = false;
-        }
-
-        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-
-        // --- Event Listeners ---
-
-        // Level Navigation
-        levelNavBtns.forEach(btn => {
+        // Level Pills
+        document.querySelectorAll('.nav-pill:not(.quiz-pill)').forEach(btn => {
             btn.addEventListener('click', () => {
-                // Ignore if clicking already active level
-                if (btn.classList.contains('active')) return;
-
-                levelNavBtns.forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
-                // Need to restore original DOM if returning from empty favorites state
-                if (mainContentArea.innerHTML.includes('empty-state')) {
-                    // Small hack to reload the page state structure
-                    location.reload();
-                }
-
                 currentLevel = btn.dataset.level;
                 fetchLevelData(currentLevel);
             });
         });
 
-        // Kanji Navigation
-        btnNext.addEventListener('click', () => {
-            if (kanjiList.length === 0) return;
-            if (currentIndex < kanjiList.length - 1) {
-                loadKanjiData(currentIndex + 1);
-            } else {
+        // --- Kanji Core Logic ---
+        async function fetchLevelData(level) {
+            showLoading(`Fetching N${level} Data...`);
+            try {
+                if (level === 'favorites') kanjiList = [...favorites];
+                else {
+                    const res = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/jlpt-${level}`);
+                    kanjiList = await res.json();
+                }
                 shuffleArray(kanjiList);
-                loadKanjiData(0);
+                
+                if(containers.quiz.classList.contains('active-section')) switchView('kanji');
+
+                if (kanjiList.length > 0) await loadKanjiData(0);
+                else {
+                    containers.kanji.innerHTML = `<div style="padding:40px; text-align:center;">No data found!</div>`;
+                    hideLoading();
+                }
+            } catch (err) { hideLoading(); alert('Error loading Kanji list. Network might be slow.'); }
+        }
+
+        async function loadKanjiData(index) {
+            if (index < 0 || index >= kanjiList.length) return;
+            currentIndex = index;
+            const targetKanji = kanjiList[currentIndex];
+            document.getElementById('progress-indicator').textContent = `${currentIndex + 1} / ${kanjiList.length}`;
+            document.getElementById('btn-prev').disabled = currentIndex === 0;
+
+            const starBtn = document.getElementById('btn-star');
+            starBtn.className = `btn-star ${favorites.includes(targetKanji) ? 'starred' : ''}`;
+            starBtn.innerHTML = favorites.includes(targetKanji) ? '★' : '☆';
+
+            showLoading(`Loading ${targetKanji}...`);
+            try {
+                const res = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/${targetKanji}`);
+                const data = await res.json();
+                
+                document.getElementById('kanji-char').textContent = data.kanji;
+                document.getElementById('kanji-meanings').textContent = data.meanings.slice(0, 3).join(', ') || '-';
+                document.getElementById('kanji-onyomi').textContent = data.on_readings.length ? data.on_readings.join(', ') : '-';
+                document.getElementById('kanji-kunyomi').textContent = data.kun_readings.length ? data.kun_readings.join(', ') : '-';
+
+                setupHanziWriter(targetKanji);
+                clearCanvas();
+                hideLoading();
+            } catch (e) { 
+                hideLoading(); 
             }
+        }
+
+        document.getElementById('btn-next').addEventListener('click', () => { if (currentIndex < kanjiList.length - 1) loadKanjiData(currentIndex + 1); else { shuffleArray(kanjiList); loadKanjiData(0); } });
+        document.getElementById('btn-prev').addEventListener('click', () => { if (currentIndex > 0) loadKanjiData(currentIndex - 1); });
+
+        // Favorites
+        document.getElementById('btn-star').addEventListener('click', () => {
+            const k = kanjiList[currentIndex];
+            if (favorites.includes(k)) favorites = favorites.filter(f => f !== k);
+            else favorites.push(k);
+            localStorage.setItem('jlpt_favorites', JSON.stringify(favorites));
+            document.getElementById('btn-star').className = `btn-star ${favorites.includes(k) ? 'starred' : ''}`;
+            document.getElementById('btn-star').innerHTML = favorites.includes(k) ? '★' : '☆';
+            if(currentLevel === 'favorites') fetchLevelData('favorites');
         });
 
-        btnPrev.addEventListener('click', () => {
-            if (currentIndex > 0) loadKanjiData(currentIndex - 1);
+        // --- Stroke Checker & Drawing ---
+        function updateDrawingColors() {
+            const sc = isDarkMode ? '#818cf8' : '#4f46e5';
+            const oc = isDarkMode ? '#334155' : '#cbd5e1';
+            ctx.strokeStyle = isDarkMode ? '#f8fafc' : '#0f172a';
+            if(hanziWriterInstance) { hanziWriterInstance.updateColor('strokeColor', sc); hanziWriterInstance.updateColor('outlineColor', oc); }
+        }
+
+        function setupHanziWriter(kanji) {
+            document.getElementById('quiz-status').textContent = "";
+            const sc = isDarkMode ? '#818cf8' : '#4f46e5';
+            const oc = isDarkMode ? '#334155' : '#cbd5e1';
+            if (!hanziWriterInstance) {
+                hanziWriterInstance = HanziWriter.create('hanzi-writer-target', kanji, { width: 250, height: 250, padding: 10, showOutline: true, strokeColor: sc, outlineColor: oc });
+            } else {
+                updateDrawingColors();
+                hanziWriterInstance.setCharacter(kanji);
+            }
+        }
+
+        document.getElementById('btn-hint').addEventListener('click', () => { 
+            document.getElementById('quiz-status').textContent = "";
+            hanziWriterInstance && hanziWriterInstance.animateCharacter(); 
         });
 
-        // Actions
-        btnClear.addEventListener('click', clearCanvas);
-        btnReplay.addEventListener('click', () => hanziWriterIntance && hanziWriterIntance.animateCharacter());
-        btnStar.addEventListener('click', toggleFavorite);
+        document.getElementById('btn-test-stroke').addEventListener('click', () => {
+            if(!hanziWriterInstance) return;
+            document.getElementById('quiz-status').textContent = "Draw the stroke on the canvas...";
+            document.getElementById('quiz-status').style.color = "var(--primary)";
+            hanziWriterInstance.quiz({
+                onMistake: function(strokeData) {
+                    document.getElementById('quiz-status').textContent = "Wrong stroke! Try again.";
+                    document.getElementById('quiz-status').style.color = "#dc2626";
+                },
+                onComplete: function(summaryData) {
+                    document.getElementById('quiz-status').textContent = "Correct! Great job 🎉";
+                    document.getElementById('quiz-status').style.color = "#10b981";
+                }
+            });
+        });
 
-        // Flashcard 
-        flashcardToggle.addEventListener('click', toggleFlashcardMode);
-        btnReveal.addEventListener('click', revealAnswer);
+        // Manual Canvas
+        const canvas = document.getElementById('drawing-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        updateDrawingColors();
 
-        // Canvas Interaction
-        canvas.addEventListener('mousedown', handleStart);
-        canvas.addEventListener('mousemove', handleMove);
-        canvas.addEventListener('mouseup', handleEnd);
-        canvas.addEventListener('mouseout', handleEnd);
-        canvas.addEventListener('touchstart', handleStart, { passive: false });
-        canvas.addEventListener('touchmove', handleMove, { passive: false });
-        canvas.addEventListener('touchend', handleEnd, { passive: false });
-        canvas.addEventListener('touchcancel', handleEnd, { passive: false });
+        function getPos(e) { const r = canvas.getBoundingClientRect(); const x = e.touches ? e.touches[0].clientX : e.clientX; const y = e.touches ? e.touches[0].clientY : e.clientY; return { x: x - r.left, y: y - r.top }; }
+        function sDraw(e) { if(e.cancelable) e.preventDefault(); isDrawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }
+        function draw(e) { if(e.cancelable) e.preventDefault(); if(!isDrawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }
+        function eDraw(e) { if(e && e.cancelable) e.preventDefault(); isDrawing = false; }
+        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
-        // Bootstrap App
-        // Ensure starting UI matches the default level (N5)
+        canvas.addEventListener('mousedown', sDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', eDraw); canvas.addEventListener('mouseout', eDraw);
+        canvas.addEventListener('touchstart', sDraw, { passive: false }); canvas.addEventListener('touchmove', draw, { passive: false }); canvas.addEventListener('touchend', eDraw, { passive: false });
+        document.getElementById('btn-clear').addEventListener('click', clearCanvas);
+
+        // --- Furigana Generator ---
+        async function initKuroshiro() {
+            if(isFuriganaReady) return;
+            showLoading('Loading Dictionary (Please wait, might be slow on first load)...');
+            try {
+                kuroshiroInstance = new Kuroshiro();
+                
+                // Wrapped in Promise.race to prevent infinite loading if browser blocks storage
+                await Promise.race([
+                    kuroshiroInstance.init(new KuromojiAnalyzer({ dictPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict" })),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error("Dictionary Timeout")), 15000))
+                ]);
+                
+                isFuriganaReady = true;
+                hideLoading();
+            } catch(e) { 
+                hideLoading(); 
+                console.error("Kuroshiro Init Error:", e);
+                document.getElementById('furi-output').innerHTML = "<span style='color:#dc2626;'>Failed to load Dictionary. Your browser's Tracking Prevention might be blocking it. Please disable it for this site and try again.</span>"; 
+            }
+        }
+
+        document.getElementById('btn-generate-furi').addEventListener('click', async () => {
+            const text = document.getElementById('furi-input').value;
+            if(!text) return;
+            if(!isFuriganaReady) {
+                await initKuroshiro();
+                if(!isFuriganaReady) return; // Stop if init failed
+            }
+            const outputEl = document.getElementById('furi-output');
+            outputEl.innerHTML = "Processing...";
+            try {
+                const result = await kuroshiroInstance.convert(text, { mode: "furigana", to: "hiragana" });
+                outputEl.innerHTML = result;
+            } catch(e) { outputEl.innerHTML = "Error converting text."; }
+        });
+
+        // --- Search Feature ---
+        document.getElementById('btn-search').addEventListener('click', performSearch);
+        document.getElementById('search-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') performSearch(); });
+
+        async function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if(!query) return;
+            switchView('search');
+            showLoading(`Searching for: ${query}...`);
+            const resArea = document.getElementById('search-results-area');
+            resArea.innerHTML = '';
+            
+            try {
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent('https://api.jisho.org/api/v1/search/words?keyword=' + query)}`;
+                const response = await fetchWithTimeout(proxyUrl);
+                const jsonWrapper = await response.json();
+                const data = JSON.parse(jsonWrapper.contents);
+
+                if(!data.data || data.data.length === 0) {
+                    resArea.innerHTML = '<p>No results found.</p>';
+                    hideLoading(); return;
+                }
+
+                const topResults = data.data.slice(0, 2);
+                let html = '';
+
+                for(let item of topResults) {
+                    let word = item.japanese[0].word || item.japanese[0].reading;
+                    let reading = item.japanese[0].reading || '';
+                    let meanings = item.senses[0].english_definitions.join(', ');
+
+                    let sentenceHtml = '';
+                    let tatData = await fetchTatoeba(word);
+                    if(tatData && tatData.results && tatData.results.length > 0) {
+                        let match = tatData.results[0];
+                        sentenceHtml = `
+                            <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-left: 3px solid var(--primary);">
+                                <div>${match.text}</div>
+                                <div style="font-size: 0.9rem; color: var(--text-muted);">${match.translations[0][0].text}</div>
+                            </div>`;
+                    }
+
+                    html += `
+                        <div class="search-result-item">
+                            <div class="search-word">${word}</div>
+                            <div class="search-reading">${reading}</div>
+                            <div class="search-meaning">${meanings}</div>
+                            ${sentenceHtml}
+                        </div>
+                    `;
+                }
+                resArea.innerHTML = html;
+                hideLoading();
+
+            } catch (err) {
+                hideLoading();
+                resArea.innerHTML = '<p>Search error or timeout. Please try again later.</p>';
+            }
+        }
+
+        // --- Dynamic Reading & Listening (All Levels) ---
+        async function loadDynamicReadingListening(type) {
+            const container = type === 'reading' ? document.getElementById('reading-content') : document.getElementById('listening-content');
+            container.innerHTML = '<div style="text-align:center; padding: 20px;">Fetching sentences from web...</div>';
+            
+            try {
+                let pool = [...kanjiList];
+                if(pool.length < 5) {
+                    let r = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/jlpt-${currentLevel === 'favorites'? '5' : currentLevel}`);
+                    pool = await r.json();
+                }
+                shuffleArray(pool);
+                
+                let sentenceData = null;
+                for(let k of pool.slice(0, 10)) {
+                    try {
+                        let wRes = await fetchWithTimeout(`https://kanjiapi.dev/v1/words/${k}`);
+                        let wData = await wRes.json();
+                        let targetWord = wData[0].variants[0].written;
+                        
+                        let tatData = await fetchTatoeba(targetWord);
+                        
+                        if(tatData && tatData.results && tatData.results.length > 0) {
+                            let match = tatData.results[0];
+                            sentenceData = {
+                                jap: match.text,
+                                eng: match.translations[0][0].text,
+                                word: targetWord
+                            };
+                            break;
+                        }
+                    } catch(e) {}
+                }
+
+                if(!sentenceData) throw new Error("Could not fetch sentence.");
+
+                if(type === 'reading') {
+                    let displayHtml = sentenceData.jap;
+                    if(isFuriganaReady) {
+                        try {
+                            displayHtml = await kuroshiroInstance.convert(sentenceData.jap, { mode: "furigana", to: "hiragana" });
+                        } catch(e){}
+                    }
+                    container.innerHTML = `
+                        <div class="passage-box">
+                            ${displayHtml}
+                            <div class="english-translation" id="read-trans" style="display:none;">${sentenceData.eng}</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn-action" onclick="document.getElementById('read-trans').style.display='block'">Show Meaning</button>
+                            <button class="btn-action" onclick="speak('${sentenceData.jap}')">Listen 🔊</button>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div style="text-align: center; margin: 30px 0;">
+                            <button class="btn-tts" style="font-size: 5rem; padding: 30px; background: var(--bg-color); border-radius: 50%; box-shadow: var(--shadow-md);" onclick="speak('${sentenceData.jap}')">🔊</button>
+                            <p style="color: var(--text-muted); margin-top: 20px;">Listen to the audio and select the correct meaning below.</p>
+                        </div>
+                        <div id="listen-opts"></div>
+                    `;
+                    let opts = [sentenceData.eng, "I like eating apples.", "It is raining today.", "Where is the train station?"];
+                    shuffleArray(opts);
+                    let optDiv = document.getElementById('listen-opts');
+                    opts.forEach(o => {
+                        let b = document.createElement('button');
+                        b.className = 'quiz-option'; b.textContent = o;
+                        b.onclick = function() {
+                            let buttons = optDiv.querySelectorAll('.quiz-option');
+                            buttons.forEach(btn => { btn.disabled = true; if(btn.textContent === sentenceData.eng) btn.classList.add('correct'); });
+                            if(o !== sentenceData.eng) b.classList.add('wrong');
+                        };
+                        optDiv.appendChild(b);
+                    });
+                }
+
+            } catch(e) {
+                container.innerHTML = '<p style="color:#dc2626;">Data fetch timeout. Please click "Next Sentence" to try again.</p>';
+            }
+        }
+
+        // --- DYNAMIC QUIZ SYSTEM ---
+        document.getElementById('btn-start-quiz').addEventListener('click', () => {
+            document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-start-quiz').classList.add('active');
+            
+            document.querySelectorAll('.top-nav .nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector('.top-nav .nav-item[data-view="kanji"]').classList.add('active');
+            
+            startQuiz();
+        });
+
+        document.getElementById('btn-end-quiz').addEventListener('click', () => {
+            if(currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
+            document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-level="${currentLevel}"]`).classList.add('active');
+            fetchLevelData(currentLevel);
+        });
+
+        async function startQuiz() {
+            if(currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
+
+            if(kanjiList.length < 5) {
+                let res = await fetchWithTimeout('https://kanjiapi.dev/v1/kanji/jlpt-5');
+                kanjiList = await res.json();
+                shuffleArray(kanjiList);
+            }
+
+            Object.values(containers).forEach(c => c.classList.remove('active-section'));
+            containers.quiz.classList.add('active-section');
+            settingsBar.style.display = 'none';
+
+            document.getElementById('quiz-active-area').style.display = 'block';
+            document.getElementById('quiz-result-area').style.display = 'none';
+
+            quizScore = 0;
+            currentQuizIndex = 0;
+            quizQuestions = [];
+
+            showLoading('Generating quiz questions, please wait...');
+            
+            try {
+                let pool = [...kanjiList];
+                shuffleArray(pool);
+                let targets = pool.slice(0, 15);
+                
+                let wrongKanjiPool = pool.slice(15, 30);
+                let wrongReadingsPool = [];
+                await Promise.all(wrongKanjiPool.map(async (k) => {
+                    try {
+                        let res = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/${k}`);
+                        let d = await res.json();
+                        if(d.kun_readings && d.kun_readings.length > 0) wrongReadingsPool.push(d.kun_readings[0]);
+                        if(d.on_readings && d.on_readings.length > 0) wrongReadingsPool.push(d.on_readings[0]);
+                    } catch(e) {}
+                }));
+                wrongReadingsPool = wrongReadingsPool.filter(r => r && r !== '-' && !r.includes('.'));
+
+                for (let targetKanji of targets) {
+                    if (quizQuestions.length >= 5) break;
+
+                    try {
+                        let wordRes = await fetchWithTimeout(`https://kanjiapi.dev/v1/words/${targetKanji}`);
+                        let wordData = await wordRes.json();
+                        
+                        let commonWords = wordData.filter(w => w.variants.some(v => v.priorities && v.priorities.length > 0));
+                        let selectedWordObj = (commonWords.length > 0 ? commonWords[0] : wordData[0]);
+
+                        if (!selectedWordObj) continue;
+
+                        let targetWord = selectedWordObj.variants[0].written;
+                        let correctReading = selectedWordObj.variants[0].pronounced;
+                        let meaningHint = selectedWordObj.meanings[0].glosses.join(', ');
+                        
+                        let sentence = targetWord; 
+                        let audioUrl = null;
+
+                        let tatData = await fetchTatoeba(targetWord);
+                        if(tatData && tatData.results && tatData.results.length > 0) {
+                            let match = tatData.results.find(r => r.text.includes(targetWord)) || tatData.results[0];
+                            sentence = match.text;
+                            
+                            if(match.translations && match.translations[0] && match.translations[0][0]) {
+                                meaningHint = match.translations[0][0].text;
+                            }
+                            if(match.audios && match.audios.length > 0) {
+                                audioUrl = `https://tatoeba.org/en/audio/download/${match.audios[0].id}`;
+                            }
+                        }
+
+                        let options = [correctReading];
+                        let shuffledWrong = [...wrongReadingsPool];
+                        shuffleArray(shuffledWrong);
+
+                        for(let wr of shuffledWrong) {
+                            if(options.length >= 4) break;
+                            if(!options.includes(wr) && wr !== correctReading) options.push(wr);
+                        }
+                        
+                        while(options.length < 4) {
+                            options.push("ちがう" + Math.floor(Math.random()*100));
+                        }
+                        shuffleArray(options);
+
+                        quizQuestions.push({
+                            targetWord: targetWord,
+                            sentence: sentence,
+                            meaningHint: meaningHint,
+                            correct: correctReading,
+                            options: options,
+                            audioUrl: audioUrl
+                        });
+
+                    } catch(e) {
+                        console.log("Error processing kanji:", targetKanji);
+                    }
+                }
+                
+                if(quizQuestions.length === 0) throw new Error("Could not generate questions.");
+                
+                hideLoading();
+                renderQuizQuestion();
+                
+            } catch (e) {
+                console.error(e);
+                showError('Error generating quiz. Please try again.');
+                setTimeout(hideLoading, 3000);
+            }
+        }
+
+        function renderQuizQuestion() {
+            if(currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
+
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-qnum').textContent = `Question ${currentQuizIndex + 1}/${quizQuestions.length}`;
+            
+            const sentenceTextEl = document.getElementById('quiz-sentence-text');
+            const meaningHintEl = document.getElementById('quiz-meaning-hint');
+            const audioBtn = document.getElementById('quiz-audio-btn');
+
+            let formattedSentence = q.sentence.split(q.targetWord).join(`<span class="highlight">${q.targetWord}</span>`);
+            if(!formattedSentence.includes('highlight')) {
+                formattedSentence = q.sentence;
+            }
+
+            sentenceTextEl.innerHTML = formattedSentence;
+            meaningHintEl.textContent = q.meaningHint;
+
+            audioBtn.onclick = () => {
+                if (q.audioUrl) {
+                    if(currentAudioObj) currentAudioObj.pause();
+                    currentAudioObj = new Audio(q.audioUrl);
+                    currentAudioObj.play().catch(() => speak(q.sentence));
+                } else {
+                    speak(q.sentence);
+                }
+            };
+
+            const optionsBox = document.getElementById('quiz-options');
+            optionsBox.innerHTML = '';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.textContent = opt;
+                btn.onclick = () => handleQuizAnswer(btn, opt, q.correct);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function handleQuizAnswer(btnNode, selected, correct) {
+            const buttons = document.querySelectorAll('.quiz-option');
+            buttons.forEach(b => {
+                b.disabled = true;
+                if(b.textContent === correct) b.classList.add('correct');
+            });
+
+            if (selected === correct) {
+                quizScore++;
+            } else {
+                btnNode.classList.add('wrong');
+            }
+
+            setTimeout(() => {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            }, 1200);
+        }
+
+        function showQuizResults() {
+            document.getElementById('quiz-active-area').style.display = 'none';
+            document.getElementById('quiz-result-area').style.display = 'block';
+            document.getElementById('quiz-final-score').textContent = `${quizScore}/${quizQuestions.length}`;
+            
+            const feedback = document.getElementById('quiz-feedback');
+            if(quizScore === quizQuestions.length) feedback.textContent = 'Perfect score! Subarashii! 🎉';
+            else if(quizScore >= 3) feedback.textContent = 'Good job! Keep practicing! 👍';
+            else feedback.textContent = 'Don\'t give up! Ganbatte! 💪';
+        }
+
+        // Start App
         fetchLevelData('5');
 
     </script>
 </body>
-
 </html>
