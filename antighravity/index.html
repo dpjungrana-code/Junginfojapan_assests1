@@ -1,1704 +1,203 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="data:,">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>JLPT Kanji Mastery</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- HanziWriter (Stroke Animation & Quiz) -->
-    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
-
-    <!-- Kuroshiro (Furigana Generator) -->
-    <script src="https://cdn.jsdelivr.net/npm/kuroshiro@1.2.0/dist/kuroshiro.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/kuroshiro-analyzer-kuromoji@1.1.0/dist/kuroshiro-analyzer-kuromoji.min.js"></script>
-
-    <style>
-        :root {
-            /* Light Theme */
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --header-bg: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --canvas-bg: #ffffff;
-            --canvas-grid: #e2e8f0;
-            --star-color: #f59e0b;
-            --star-inactive: #cbd5e1;
-
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --transition-speed: 0.3s;
-        }
-
-        body.dark-theme {
-            /* Dark Theme */
-            --primary: #6366f1;
-            --primary-hover: #818cf8;
-            --header-bg: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: #334155;
-            --canvas-bg: #1e293b;
-            --canvas-grid: #334155;
-            --star-inactive: #475569;
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            overscroll-behavior-y: none;
-            transition: background-color var(--transition-speed), color var(--transition-speed);
-        }
-
-        /* --- Hero Header --- */
-        .hero-header {
-            background: var(--header-bg);
-            color: white;
-            padding: 20px 16px;
-            border-radius: 0 0 24px 24px;
-            box-shadow: var(--shadow-md);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            min-height: 35vh;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 1100px;
-        }
-
-        .app-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
-
-        .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Search Bar */
-        .search-container {
-            display: flex;
-            width: 100%;
-            max-width: 600px;
-            background: var(--card-bg);
-            border-radius: 999px;
-            padding: 4px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 12px 20px;
-            font-size: 1rem;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        .search-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 999px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Top Nav Menu */
-        .top-nav {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .nav-item {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .nav-item.active,
-        .nav-item:hover {
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Nav Pills (Level Selector) */
-        .nav-pills {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 6px;
-            border-radius: 999px;
-        }
-
-        .nav-pill {
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: white;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        .nav-pill.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .quiz-pill {
-            background: #10b981 !important;
-            color: white !important;
-        }
-
-        /* Main Content Container */
-        .app-container {
-            width: 100%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        /* Settings Bar */
-        .settings-bar {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 8px;
-            margin-bottom: 10px;
-        }
-
-        .progress-badge {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: white;
-            background: var(--primary);
-            padding: 6px 14px;
-            border-radius: 9999px;
-        }
-
-        /* Layout Grid */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        @media (min-width: 860px) {
-            .main-content {
-                display: grid;
-                grid-template-columns: 360px 1fr;
-                grid-template-rows: auto auto;
-                align-items: flex-start;
-            }
-
-            .card-kanji {
-                grid-column: 1;
-                grid-row: 1;
-            }
-
-            .card-practice {
-                grid-column: 2;
-                grid-row: 1 / span 2;
-                position: sticky;
-                top: 24px;
-            }
-
-            .card-vocab {
-                grid-column: 1;
-                grid-row: 2;
-            }
-        }
-
-        /* Generic Card */
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Kanji Display */
-        .kanji-hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            margin-bottom: 24px;
-        }
-
-        .kanji-char-display {
-            font-size: 6rem;
-            line-height: 1.1;
-            font-weight: 500;
-            margin: 0;
-            color: var(--text-main);
-        }
-
-        .btn-star {
-            position: absolute;
-            top: 0;
-            right: -20px;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: var(--star-inactive);
-            cursor: pointer;
-        }
-
-        .btn-star.starred {
-            color: var(--star-color);
-        }
-
-        .kanji-meanings {
-            font-size: 1.15rem;
-            color: var(--text-main);
-            font-weight: 600;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        .btn-tts {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 4px;
-            color: var(--primary);
-        }
-
-        .readings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            background: var(--bg-color);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            text-align: center;
-        }
-
-        .reading-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .reading-value {
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--primary);
-        }
-
-        /* Practice Area */
-        .workspaces-container {
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-            margin-bottom: 30px;
-        }
-
-        @media (min-width: 640px) {
-            .workspaces-container {
-                flex-direction: row;
-                justify-content: center;
-                gap: 24px;
-            }
-        }
-
-        .workspace-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .workspace-title {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .canvas-box {
-            width: 250px;
-            height: 250px;
-            background-color: var(--canvas-bg);
-            border: 2px dashed var(--border-color);
-            border-radius: var(--radius-md);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            background-image: linear-gradient(to right, transparent 49%, var(--canvas-grid) 49%, var(--canvas-grid) 51%, transparent 51%), linear-gradient(to bottom, transparent 49%, var(--canvas-grid) 49%, var(--canvas-grid) 51%, transparent 51%);
-        }
-
-        .canvas-box canvas,
-        .canvas-box svg {
-            touch-action: none;
-            display: block;
-        }
-
-        .btn-action {
-            background: transparent;
-            color: var(--text-main);
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            width: 100%;
-            max-width: 250px;
-        }
-
-        .btn-action.hint-btn {
-            background: #fef08a;
-            border-color: #fde047;
-            color: #854d0e;
-        }
-
-        .btn-action.test-btn {
-            background: #fee2e2;
-            border-color: #fca5a5;
-            color: #991b1b;
-        }
-
-        /* Quiz & Sections */
-        .section-container {
-            display: none;
-            max-width: 700px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .active-section {
-            display: block;
-        }
-
-        .quiz-option {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            color: var(--text-main);
-            padding: 16px;
-            border-radius: var(--radius-md);
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .quiz-option:hover {
-            border-color: var(--primary);
-        }
-
-        .quiz-option.correct {
-            background: #10b981;
-            border-color: #059669;
-            color: white;
-        }
-
-        .quiz-option.wrong {
-            background: #ef4444;
-            border-color: #dc2626;
-            color: white;
-        }
-
-        /* Dynamic Reading / Listening Passages */
-        .passage-box {
-            font-size: 1.4rem;
-            line-height: 2;
-            padding: 20px;
-            background: var(--bg-color);
-            border-radius: var(--radius-md);
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
-
-        ruby {
-            ruby-position: over;
-        }
-
-        rt {
-            color: var(--primary);
-            font-size: 0.55em;
-            font-weight: bold;
-        }
-
-        .english-translation {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-top: 15px;
-            display: none;
-            padding-top: 15px;
-            border-top: 1px dashed var(--border-color);
-        }
-
-        /* Furigana Generator */
-        .furigana-input {
-            width: 100%;
-            height: 120px;
-            padding: 15px;
-            font-size: 1.1rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            background: var(--bg-color);
-            color: var(--text-main);
-            margin-bottom: 15px;
-            font-family: inherit;
-            resize: vertical;
-        }
-
-        .furigana-output {
-            min-height: 100px;
-            padding: 20px;
-            background: var(--bg-color);
-            border-radius: var(--radius-md);
-            font-size: 1.4rem;
-            line-height: 2.2;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Search Results */
-        .search-result-item {
-            background: var(--bg-color);
-            padding: 15px;
-            border-radius: var(--radius-md);
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .search-word {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .search-reading {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }
-
-        .search-meaning {
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        /* Loading Spinner */
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0.95;
-            transition: opacity 0.3s;
-        }
-
-        .overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--border-color);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s infinite linear;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            backdrop-filter: blur(2px);
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--radius-lg);
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--shadow-md);
-            transform: translateY(20px);
-            transition: transform 0.3s;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-title {
-            margin-top: 0;
-            color: var(--text-main);
-            margin-bottom: 20px;
-        }
-
-        .api-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            background: var(--bg-color);
-            color: var(--text-main);
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-main);
-        }
-    </style>
+    <meta name="description" content="Master JLPT Kanji with stroke animations, level-filtered reading, news, listening, and offline voice practice.">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🉐</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <div id="loading-overlay" class="overlay hidden">
-        <div id="spinner" class="spinner"></div>
-        <div id="loading-text" style="font-weight: 600; font-size: 1.1rem; margin-top: 20px; text-align: center; padding: 0 20px;">Loading data...</div>
+<!-- ── Loading overlay ── -->
+<div id="loading-overlay">
+    <div class="spinner"></div>
+    <p id="loading-text">Loading...</p>
+</div>
+
+<!-- ── Translate / Lookup Modal (bottom sheet) ── -->
+<div id="modal-backdrop"></div>
+<div id="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-word-row">
+        <div>
+            <div id="modal-word">—</div>
+            <div id="modal-reading">—</div>
+        </div>
+        <button class="icon-btn" id="modal-speak-btn" style="background:var(--surface2); color:var(--primary);">🔊</button>
+    </div>
+    <div id="modal-meaning">—</div>
+    <button class="btn-modal-close" id="modal-close-btn">Close</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header class="app-header">
+    <div class="header-top">
+        <div>
+            <div class="app-title">JLPT Kanji Mastery</div>
+            <div class="app-subtitle">漢字・語彙・リスニング・ボイス</div>
+        </div>
+        <button class="icon-btn" id="theme-btn" title="Toggle theme">🌙</button>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 class="modal-title">⚙️ AI Settings</h2>
-            <div class="form-group">
-                <label for="gemini-api-key">Google Gemini API Key</label>
-                <input type="password" id="gemini-api-key" class="api-input" placeholder="Enter your Gemini API Key...">
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0;">
-                    Your key is securely stored only in your browser's local storage and is sent directly to Google's API to power the AI features.
-                </p>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end;">
-                <button id="btn-close-settings" class="btn-action" style="max-width: 100px;">Cancel</button>
-                <button id="btn-save-settings" class="btn-action" style="max-width: 100px; background: var(--primary); color: white;">Save</button>
-            </div>
-        </div>
+    <!-- Section tabs -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="kanji">字 Kanji</button>
+        <button class="tab-btn" data-tab="reading">📖 Reading</button>
+        <button class="tab-btn" data-tab="news">📰 News</button>
+        <button class="tab-btn" data-tab="listening">🎧 Listen</button>
+        <button class="tab-btn" data-tab="voice">🎙️ Voice</button>
+    </nav>
+
+    <!-- JLPT Level pills -->
+    <div class="level-nav">
+        <button class="level-btn active" data-level="5">N5</button>
+        <button class="level-btn" data-level="4">N4</button>
+        <button class="level-btn" data-level="3">N3</button>
+        <button class="level-btn" data-level="2">N2</button>
+        <button class="level-btn" data-level="1">N1</button>
+        <button class="level-btn" data-level="favorites">⭐ Favs</button>
     </div>
+</header>
 
-    <!-- Top Hero Header (40% Viewport Area) -->
-    <header class="hero-header">
-        <div class="header-top">
-            <h1 class="app-title">JLPT Kanji Mastery</h1>
-            <div style="display: flex; gap: 10px;">
-                <button id="theme-toggle" class="theme-toggle-btn">🌙</button>
-                <button id="settings-toggle" class="theme-toggle-btn">⚙️</button>
-            </div>
-        </div>
+<!-- ── Search Bar ── -->
+<div class="search-wrap">
+    <div class="search-inner">
+        <input type="search" id="search-input" placeholder="Search dictionary (JP or EN)…" autocomplete="off" spellcheck="false">
+        <button id="search-clear" title="Clear">✕</button>
+    </div>
+</div>
 
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-input" placeholder="Search words (English/Japanese)...">
-            <button id="btn-search" class="search-btn">Search 🔍</button>
-        </div>
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
+<main class="content">
 
-        <nav class="top-nav" id="top-nav">
-            <div class="nav-item active" data-view="kanji">字 Kanji</div>
-            <div class="nav-item" data-view="reading">読 Reading</div>
-            <div class="nav-item" data-view="listening">聴 Listening</div>
-            <div class="nav-item" data-view="writing">📝 Writing</div>
-            <div class="nav-item" data-view="furigana">✍️ Furigana Maker</div>
-        </nav>
+    <!-- ── 1. KANJI ── -->
+    <section class="section active" id="sec-kanji">
+        <div class="card">
+            <div class="kanji-hero">
+                <!-- Progress -->
+                <div class="progress-chip" id="progress-chip">0 / 0</div>
 
-        <nav class="nav-pills" id="level-nav">
-            <button class="nav-pill active" data-level="5">N5</button>
-            <button class="nav-pill" data-level="4">N4</button>
-            <button class="nav-pill" data-level="3">N3</button>
-            <button class="nav-pill" data-level="2">N2</button>
-            <button class="nav-pill" data-level="1">N1</button>
-            <button class="nav-pill" data-level="favorites">⭐ Favorites</button>
-            <button class="nav-pill quiz-pill" id="btn-start-quiz">Start Quiz 🎯</button>
-        </nav>
-    </header>
+                <!-- HanziWriter target — DO NOT change the 200×200 dimensions -->
+                <div id="hw-target"></div>
 
-    <div class="app-container">
+                <!-- Meanings -->
+                <div class="kanji-meanings" id="kanji-meanings">—</div>
 
-        <div class="settings-bar" id="settings-bar">
-            <div id="progress-indicator" class="progress-badge">0 / 0</div>
-            <!-- Flashcard mode temporarily hidden to keep UI clean -->
-            <button class="btn-action" style="max-width: 150px; padding: 6px; display:none;"
-                id="flashcard-toggle">Flashcard Mode</button>
-        </div>
-
-        <!-- 1. MAIN KANJI STUDY CONTENT -->
-        <div class="main-content section-container active-section" id="kanji-container">
-
-            <div class="card card-kanji">
-                <div class="kanji-hero">
-                    <div class="kanji-char-wrapper">
-                        <h2 id="kanji-char" class="kanji-char-display">-</h2>
-                        <button id="btn-star" class="btn-star">★</button>
+                <!-- Readings -->
+                <div class="readings-row">
+                    <div class="reading-block">
+                        <div class="reading-label">On'yomi</div>
+                        <div class="reading-value" id="kanji-on">—</div>
                     </div>
-                    <div class="info-content">
-                        <div id="kanji-meanings" class="kanji-meanings">-</div>
-                        <button id="btn-ai-mnemonic" class="btn-action" style="margin-top: 10px; padding: 6px 12px; font-size: 0.9rem; max-width: 160px; display: inline-flex; align-items: center; justify-content: center; gap: 5px;">
-                            💡 AI Mnemonic
-                        </button>
-                    </div>
-                </div>
-
-                <div id="ai-mnemonic-output" style="display: none; margin: 15px 20px; padding: 15px; background: rgba(79, 70, 229, 0.05); border-left: 3px solid var(--primary); font-style: italic; font-size: 0.95rem; border-radius: 0 var(--radius-md) var(--radius-md) 0;"></div>
-
-                <div class="info-content readings-grid">
-                    <div>
-                        <div class="reading-label">Onyomi</div>
-                        <div style="display: flex; justify-content:center; align-items:center; gap:5px;">
-                            <span id="kanji-onyomi" class="reading-value">-</span>
-                            <button class="btn-tts" id="tts-on">🔊</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="reading-label">Kunyomi</div>
-                        <div style="display: flex; justify-content:center; align-items:center; gap:5px;">
-                            <span id="kanji-kunyomi" class="reading-value">-</span>
-                            <button class="btn-tts" id="tts-kun">🔊</button>
-                        </div>
+                    <div class="reading-block">
+                        <div class="reading-label">Kun'yomi</div>
+                        <div class="reading-value" id="kanji-kun">—</div>
                     </div>
                 </div>
             </div>
 
-            <div class="card card-practice">
-                <h2 style="margin:0 0 15px 0;">Practice Area</h2>
-                <div class="workspaces-container">
-                    <div class="workspace-col">
-                        <h3 class="workspace-title">Stroke Guide / Test</h3>
-                        <div id="hanzi-writer-target" class="canvas-box"></div>
-                        <div style="display: flex; gap: 10px; width: 100%;">
-                            <button id="btn-hint" class="btn-action hint-btn">Show Hint 💡</button>
-                            <button id="btn-test-stroke" class="btn-action test-btn">Check Strokes ✍️</button>
-                        </div>
-                        <p id="quiz-status" style="font-size: 0.8rem; color: var(--primary); margin: 0;"></p>
-                    </div>
-                    <div class="workspace-col">
-                        <h3 class="workspace-title">Your Turn</h3>
-                        <div class="canvas-box">
-                            <canvas id="drawing-canvas" width="250" height="250"></canvas>
-                        </div>
-                        <button id="btn-clear" class="btn-action">Clear Canvas</button>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 15px;">
-                    <button id="btn-prev" class="btn-action" disabled>&larr; Previous</button>
-                    <button id="btn-next" class="btn-action" style="background: var(--primary); color: white;">Next
-                        Kanji &rarr;</button>
-                </div>
+            <!-- Controls -->
+            <div class="btn-row">
+                <button class="btn" id="btn-hint">💡 Hint</button>
+                <button class="btn btn-primary" id="btn-quiz">✍️ Quiz</button>
+                <button class="btn btn-icon" id="btn-speak-kanji" title="Listen">🔊</button>
+                <button class="btn btn-icon" id="btn-star" title="Add to favourites">☆</button>
             </div>
-
+            <div class="btn-row">
+                <button class="btn" id="btn-prev">← Prev</button>
+                <button class="btn btn-primary" id="btn-next">Next →</button>
+            </div>
         </div>
+    </section>
 
-        <!-- 2. READING CONTAINER -->
-        <div class="card section-container" id="reading-container">
-            <h2 style="margin-top:0;">Reading N<span id="read-lvl"></span></h2>
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                <button class="btn-action" style="flex: 1; min-width: 150px; background: var(--primary); color: white;" onclick="generateAIReading('level')">
-                    Generate N<span id="btn-read-lvl">5</span> Story ✨
-                </button>
-                <div style="flex: 1; min-width: 200px; display: flex; gap: 5px;">
-                    <input type="text" id="ai-topic-input" class="api-input" style="margin-bottom: 0;" placeholder="Topic (e.g. Sushi)...">
-                    <button class="btn-action" style="background: var(--text-main); color: var(--bg-color);" onclick="generateAIReading('topic')">
-                        Go
-                    </button>
-                </div>
-            </div>
-
+    <!-- ── 2. READING ── -->
+    <section class="section" id="sec-reading">
+        <div class="card">
+            <div class="card-label" id="reading-level-label">N5 Reading</div>
             <div id="reading-content">
-                <div style="text-align:center; padding: 20px; color: var(--text-muted);">
-                    Click a generate button above to create a reading passage.
+                <div class="loading-stub"><div class="spinner"></div><span>Loading story…</span></div>
+            </div>
+            <div class="btn-row" style="margin-top:16px;">
+                <button class="btn btn-primary btn-full" id="btn-next-story">Next Story 🎲</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 3. NEWS ── -->
+    <section class="section" id="sec-news">
+        <div class="card">
+            <div class="card-label" id="news-level-label">N5 News</div>
+            <div id="news-content">
+                <div class="loading-stub"><div class="spinner"></div><span>Loading news…</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 4. LISTENING ── -->
+    <section class="section" id="sec-listening">
+        <div class="card">
+            <div class="card-label" id="listen-level-label">N5 Listening</div>
+
+            <!-- Sentence display -->
+            <div class="passage" id="listen-sentence" style="margin-bottom:16px; min-height:56px; text-align:center;">
+                ❓ Press ▶ to hear the sentence
+            </div>
+
+            <!-- Audio controls -->
+            <div class="listen-hero">
+                <button class="play-btn" id="btn-play" title="Play">▶</button>
+                <div class="audio-ctrl-row">
+                    <button class="audio-ctrl" id="btn-pause" title="Pause">⏸</button>
+                    <button class="audio-ctrl stop" id="btn-stop" title="Stop">⏹</button>
                 </div>
             </div>
-            
-            <button id="btn-grammar-tutor" class="btn-action" style="background: #10b981; color: white; margin-top: 15px; display: none; width: 100%;">
-                🤖 Grammar Tutor Explain This
-            </button>
-            <div id="grammar-tutor-output" style="display: none; margin-top: 15px; padding: 15px; background: rgba(16, 185, 129, 0.05); border-left: 3px solid #10b981; font-size: 0.95rem; border-radius: 0 var(--radius-md) var(--radius-md) 0;"></div>
-        </div>
 
-        <!-- 3. LISTENING CONTAINER -->
-        <div class="card section-container" id="listening-container">
-            <h2 style="margin-top:0;">Listening N<span id="listen-lvl"></span></h2>
-            <div id="listening-content">
-                <!-- Data injected dynamically -->
-            </div>
-            <button class="btn-action" style="background: var(--primary); color: white; margin-top: 20px;"
-                onclick="loadDynamicReadingListening('listening')">Next Audio</button>
-        </div>
+            <!-- Multiple choice -->
+            <div class="quiz-opts" id="listen-opts"></div>
 
-        <!-- 4. WRITING (Mistake Checker) -->
-        <div class="card section-container" id="writing-container">
-            <h2 style="margin-top:0;">📝 AI Mistake Checker</h2>
-            <p style="color: var(--text-muted);">Practice your Japanese writing. Type a few sentences below, and the AI will check for spelling, kanji, and grammar mistakes.</p>
-            <textarea id="writing-input" class="furigana-input" style="min-height: 120px;" placeholder="Enter your Japanese text here (e.g., 私は明日学校にいきます)..."></textarea>
-            <button id="btn-check-mistakes" class="btn-action" style="background: var(--primary); color: white; width: 100%; margin-bottom: 20px;">Check My Japanese 🔍</button>
-
-            <div id="writing-output" style="display: none; padding: 15px; background: rgba(79, 70, 229, 0.05); border-left: 3px solid var(--primary); border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 1rem; line-height: 1.6;"></div>
-        </div>
-
-        <!-- 5. FURIGANA GENERATOR -->
-        <div class="card section-container" id="furigana-container">
-            <h2 style="margin-top:0;">✍️ Auto-Furigana Generator</h2>
-            <p style="color: var(--text-muted);">Paste any Japanese text here to generate furigana (hiragana).</p>
-            <textarea id="furi-input" class="furigana-input"
-                placeholder="Enter Japanese text here (e.g., 私は毎日水を飲みます)..."></textarea>
-            <button id="btn-generate-furi" class="btn-action"
-                style="background: var(--primary); color: white; max-width: 100%; margin-bottom: 20px;">Generate
-                Furigana</button>
-
-            <h3 style="margin: 0 0 10px 0;">Result:</h3>
-            <div id="furi-output" class="furigana-output">Result will appear here...</div>
-        </div>
-
-        <!-- 5. SEARCH RESULTS -->
-        <div class="card section-container" id="search-container">
-            <h2 style="margin-top:0;">🔍 Search Results</h2>
-            <div id="search-results-area">
-                <!-- Search results injected here -->
+            <div class="btn-row" style="margin-top:16px;">
+                <button class="btn btn-primary btn-full" id="btn-next-listen">Next Sentence 🎲</button>
             </div>
         </div>
+    </section>
 
-        <!-- 6. QUIZ CONTAINER -->
-        <div class="card section-container" id="quiz-container">
-            <div id="quiz-active-area">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                    <h2 style="margin:0;">Quiz Mode</h2>
-                    <h3 id="quiz-qnum" style="margin:0; color: var(--primary);">Question 1/5</h3>
+    <!-- ── 5. VOICE ── -->
+    <section class="section" id="sec-voice">
+        <div class="card">
+            <div class="card-label">Voice Practice</div>
+            <div class="voice-hero">
+                <div id="voice-word">—</div>
+                <div id="voice-meaning">Select a level to begin</div>
+                <div style="display:flex; gap:12px; justify-content:center;">
+                    <button class="btn btn-icon" id="btn-speak-voice" title="Hear it">🔊</button>
+                    <button class="btn btn-primary" id="btn-start-voice" style="flex:0;padding:11px 20px;">🎙️ Speak</button>
                 </div>
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <div id="quiz-sentence" class="passage-box">
-                        <span id="quiz-sentence-text"></span>
-                        <button id="quiz-audio-btn" class="btn-tts">🔊</button>
-                    </div>
-                    <p id="quiz-meaning-hint" style="color: var(--text-muted); font-weight: 600; margin-bottom: 10px;">
-                    </p>
-                    <p style="color: var(--text-muted);">How do you read the highlighted word?</p>
-                </div>
-                <div id="quiz-options"></div>
+                <div id="voice-status"></div>
             </div>
-            <div id="quiz-result-area" style="display:none; text-align: center;">
-                <h2>Quiz Complete!</h2>
-                <h1 id="quiz-final-score" style="font-size: 4rem; color: var(--primary); margin: 10px 0;">4/5</h1>
-                <p id="quiz-feedback" style="color: var(--text-muted); margin-bottom: 20px;"></p>
-                <button class="btn-action" id="btn-end-quiz" style="background: var(--primary); color: white;">Go
-                    Back</button>
+            <div class="btn-row">
+                <button class="btn btn-full" id="btn-next-voice">Next Word 🎲</button>
             </div>
         </div>
-
-    </div>
-
-    <script>
-        // --- State Variables ---
-        let currentLevel = '5';
-        let kanjiList = [];
-        let currentIndex = -1;
-        let hanziWriterInstance = null;
-        let favorites = JSON.parse(localStorage.getItem('jlpt_favorites') || '[]');
-        let isDarkMode = localStorage.getItem('jlpt_theme') === 'dark';
-        let kuroshiroInstance = null;
-        let isFuriganaReady = false;
-        let geminiApiKey = localStorage.getItem('gemini_api_key') || '';
-
-        // Quiz / Dynamic Data State
-        let quizQuestions = [];
-        let currentQuizIndex = 0;
-        let quizScore = 0;
-        let currentAudioObj = null;
-
-        // --- DOM Elements ---
-        const overlay = document.getElementById('loading-overlay');
-        const overlayText = document.getElementById('loading-text');
-        const settingsBar = document.getElementById('settings-bar');
-
-        const containers = {
-            kanji: document.getElementById('kanji-container'),
-            reading: document.getElementById('reading-container'),
-            listening: document.getElementById('listening-container'),
-            writing: document.getElementById('writing-container'),
-            furigana: document.getElementById('furigana-container'),
-            search: document.getElementById('search-container'),
-            quiz: document.getElementById('quiz-container')
-        };
-
-        // --- Theme ---
-        if (isDarkMode) { document.body.classList.add('dark-theme'); document.getElementById('theme-toggle').textContent = '☀️'; }
-        document.getElementById('theme-toggle').addEventListener('click', (e) => {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-theme', isDarkMode);
-            e.target.textContent = isDarkMode ? '☀️' : '🌙';
-            localStorage.setItem('jlpt_theme', isDarkMode ? 'dark' : 'light');
-            if (hanziWriterInstance) updateDrawingColors();
-        });
-
-        // --- Settings Modal ---
-        const settingsModal = document.getElementById('settings-modal');
-        const apiKeyInput = document.getElementById('gemini-api-key');
-
-        document.getElementById('settings-toggle').addEventListener('click', () => {
-            apiKeyInput.value = geminiApiKey;
-            settingsModal.classList.add('active');
-        });
-
-        document.getElementById('btn-close-settings').addEventListener('click', () => {
-            settingsModal.classList.remove('active');
-        });
-
-        document.getElementById('btn-save-settings').addEventListener('click', () => {
-            geminiApiKey = apiKeyInput.value.trim();
-            localStorage.setItem('gemini_api_key', geminiApiKey);
-            settingsModal.classList.remove('active');
-        });
-
-        // --- Utils ---
-        function showLoading(text) {
-            overlayText.textContent = text;
-            document.getElementById('spinner').style.display = 'block';
-            overlay.classList.remove('hidden');
-        }
-        function hideLoading() {
-            overlay.classList.add('hidden');
-        }
-        function speak(text) {
-            if (!text || text === '-') return;
-            const u = new SpeechSynthesisUtterance(text.replace(/-/g, '').split(',')[0].trim());
-            u.lang = 'ja-JP'; u.rate = 0.9;
-            window.speechSynthesis.speak(u);
-        }
-        function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
-
-        document.getElementById('tts-on').addEventListener('click', () => speak(document.getElementById('kanji-onyomi').textContent));
-        document.getElementById('tts-kun').addEventListener('click', () => speak(document.getElementById('kanji-kunyomi').textContent));
-
-        // --- Timeout Wrapper for APIs (Safety feature) ---
-        async function fetchWithTimeout(resource, options = {}) {
-            const { timeout = 8000 } = options;
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), timeout);
-            const response = await fetch(resource, { ...options, signal: controller.signal });
-            clearTimeout(id);
-            return response;
-        }
-
-        // --- Gemini API Helper ---
-        async function callGeminiAPI(systemPrompt, userPrompt) {
-            if (!geminiApiKey) {
-                settingsModal.classList.add('active');
-                throw new Error("API Key required");
-            }
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
-            const payload = {
-                system_instruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                contents: [{
-                    parts: [{ text: userPrompt }]
-                }],
-                generationConfig: {
-                    temperature: 0.7,
-                }
-            };
-
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || "Gemini API error");
-            }
-
-            const data = await response.json();
-            if (data.candidates && data.candidates[0].content.parts.length > 0) {
-                return data.candidates[0].content.parts[0].text;
-            }
-            return "";
-        }
-
-        // --- Helper for Tatoeba API to bypass CORS & Tracking Blockers ---
-        async function fetchTatoeba(query) {
-            const tatUrl = `https://tatoeba.org/en/api_v0/search?from=jpn&to=eng&query=${encodeURIComponent(query)}`;
-            const proxies = [
-                `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(tatUrl)}`,
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(tatUrl)}`
-            ];
-            for (let proxyUrl of proxies) {
-                try {
-                    const res = await fetchWithTimeout(proxyUrl, { timeout: 15000 });
-                    if (res.ok) return await res.json();
-                } catch (e) {
-                    console.warn(`Proxy failed: ${proxyUrl}`, e.message);
-                }
-            }
-            return null;
-        }
-
-        // --- Top Navigation Handler ---
-        function switchView(viewName) {
-            document.querySelectorAll('.top-nav .nav-item').forEach(nav => nav.classList.remove('active'));
-            const activeNav = document.querySelector(`.top-nav .nav-item[data-view="${viewName}"]`);
-            if (activeNav) activeNav.classList.add('active');
-
-            Object.values(containers).forEach(c => c.classList.remove('active-section'));
-            if (containers[viewName]) containers[viewName].classList.add('active-section');
-
-            if (currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
-            settingsBar.style.display = (viewName === 'kanji') ? 'flex' : 'none';
-
-            if (viewName === 'reading' || viewName === 'listening') {
-                document.getElementById('read-lvl').textContent = currentLevel;
-                document.getElementById('btn-read-lvl').textContent = currentLevel;
-                document.getElementById('listen-lvl').textContent = currentLevel;
-                if (viewName === 'listening') loadDynamicReadingListening('listening');
-            }
-            if (viewName === 'furigana' && !isFuriganaReady) initKuroshiro();
-        }
-
-        document.querySelectorAll('.top-nav .nav-item').forEach(item => {
-            item.addEventListener('click', () => switchView(item.dataset.view));
-        });
-
-        // Level Pills
-        document.querySelectorAll('.nav-pill:not(.quiz-pill)').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentLevel = btn.dataset.level;
-                fetchLevelData(currentLevel);
-            });
-        });
-
-        // --- Kanji Core Logic ---
-        async function fetchLevelData(level) {
-            showLoading(`Fetching N${level} Data...`);
-            try {
-                if (level === 'favorites') kanjiList = [...favorites];
-                else {
-                    const res = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/jlpt-${level}`);
-                    kanjiList = await res.json();
-                }
-                shuffleArray(kanjiList);
-
-                if (containers.quiz.classList.contains('active-section')) switchView('kanji');
-
-                if (kanjiList.length > 0) await loadKanjiData(0);
-                else {
-                    containers.kanji.innerHTML = `<div style="padding:40px; text-align:center;">No data found!</div>`;
-                    hideLoading();
-                }
-            } catch (err) { hideLoading(); alert('Error loading Kanji list. Network might be slow.'); }
-        }
-
-        async function loadKanjiData(index) {
-            if (index < 0 || index >= kanjiList.length) return;
-            currentIndex = index;
-            const targetKanji = kanjiList[currentIndex];
-            document.getElementById('progress-indicator').textContent = `${currentIndex + 1} / ${kanjiList.length}`;
-            document.getElementById('btn-prev').disabled = currentIndex === 0;
-
-            const starBtn = document.getElementById('btn-star');
-            starBtn.className = `btn-star ${favorites.includes(targetKanji) ? 'starred' : ''}`;
-            starBtn.innerHTML = favorites.includes(targetKanji) ? '★' : '☆';
-
-            showLoading(`Loading ${targetKanji}...`);
-            try {
-                const res = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/${targetKanji}`);
-                const data = await res.json();
-
-                document.getElementById('kanji-char').textContent = data.kanji;
-                document.getElementById('kanji-meanings').textContent = data.meanings.slice(0, 3).join(', ') || '-';
-                document.getElementById('kanji-onyomi').textContent = data.on_readings.length ? data.on_readings.join(', ') : '-';
-                document.getElementById('kanji-kunyomi').textContent = data.kun_readings.length ? data.kun_readings.join(', ') : '-';
-            
-                // Reset mnemonic output
-                document.getElementById('ai-mnemonic-output').style.display = 'none';
-                document.getElementById('ai-mnemonic-output').textContent = '';
-
-                setupHanziWriter(targetKanji);
-                clearCanvas();
-                hideLoading();
-            } catch (e) {
-                hideLoading();
-            }
-        }
-
-        document.getElementById('btn-next').addEventListener('click', () => { if (currentIndex < kanjiList.length - 1) loadKanjiData(currentIndex + 1); else { shuffleArray(kanjiList); loadKanjiData(0); } });
-        document.getElementById('btn-prev').addEventListener('click', () => { if (currentIndex > 0) loadKanjiData(currentIndex - 1); });
-
-        // AI Mnemonic Logic
-        document.getElementById('btn-ai-mnemonic').addEventListener('click', async () => {
-            const kanji = document.getElementById('kanji-char').textContent;
-            const meanings = document.getElementById('kanji-meanings').textContent;
-            if (!kanji || kanji === '-') return;
-
-            const outputEl = document.getElementById('ai-mnemonic-output');
-            outputEl.style.display = 'block';
-            outputEl.innerHTML = '<span style="color: var(--text-muted);">Generating AI Mnemonic...</span>';
-            showLoading("AI is thinking of a mnemonic...");
-
-            try {
-                const prompt = `Write a very short, funny, and highly memorable mnemonic (1-2 sentences max) to remember the Japanese Kanji "${kanji}", which means "${meanings}". Focus purely on visual shapes of the radicals or a clever wordplay. Don't be too verbose.`;
-                const mnemonic = await callGeminiAPI("You are an expert Japanese mnemonic tutor.", prompt);
-                outputEl.innerHTML = mnemonic.replace(/\n/g, '<br>');
-            } catch (e) {
-                outputEl.innerHTML = `<span style="color: #dc2626;">Error: ${e.message}</span>`;
-            } finally {
-                hideLoading();
-            }
-        });
-
-        // Favorites
-        document.getElementById('btn-star').addEventListener('click', () => {
-            const k = kanjiList[currentIndex];
-            if (favorites.includes(k)) favorites = favorites.filter(f => f !== k);
-            else favorites.push(k);
-            localStorage.setItem('jlpt_favorites', JSON.stringify(favorites));
-            document.getElementById('btn-star').className = `btn-star ${favorites.includes(k) ? 'starred' : ''}`;
-            document.getElementById('btn-star').innerHTML = favorites.includes(k) ? '★' : '☆';
-            if (currentLevel === 'favorites') fetchLevelData('favorites');
-        });
-
-        // --- Stroke Checker & Drawing ---
-        function updateDrawingColors() {
-            const sc = isDarkMode ? '#818cf8' : '#4f46e5';
-            const oc = isDarkMode ? '#334155' : '#cbd5e1';
-            ctx.strokeStyle = isDarkMode ? '#f8fafc' : '#0f172a';
-            if (hanziWriterInstance) { hanziWriterInstance.updateColor('strokeColor', sc); hanziWriterInstance.updateColor('outlineColor', oc); }
-        }
-
-        function setupHanziWriter(kanji) {
-            document.getElementById('quiz-status').textContent = "";
-            const sc = isDarkMode ? '#818cf8' : '#4f46e5';
-            const oc = isDarkMode ? '#334155' : '#cbd5e1';
-            if (!hanziWriterInstance) {
-                hanziWriterInstance = HanziWriter.create('hanzi-writer-target', kanji, { width: 250, height: 250, padding: 10, showOutline: true, strokeColor: sc, outlineColor: oc });
-            } else {
-                updateDrawingColors();
-                hanziWriterInstance.setCharacter(kanji);
-            }
-        }
-
-        document.getElementById('btn-hint').addEventListener('click', () => {
-            document.getElementById('quiz-status').textContent = "";
-            hanziWriterInstance && hanziWriterInstance.animateCharacter();
-        });
-
-        document.getElementById('btn-test-stroke').addEventListener('click', () => {
-            if (!hanziWriterInstance) return;
-            document.getElementById('quiz-status').textContent = "Draw the stroke on the canvas...";
-            document.getElementById('quiz-status').style.color = "var(--primary)";
-            hanziWriterInstance.quiz({
-                onMistake: function (strokeData) {
-                    document.getElementById('quiz-status').textContent = "Wrong stroke! Try again.";
-                    document.getElementById('quiz-status').style.color = "#dc2626";
-                },
-                onComplete: function (summaryData) {
-                    document.getElementById('quiz-status').textContent = "Correct! Great job 🎉";
-                    document.getElementById('quiz-status').style.color = "#10b981";
-                }
-            });
-        });
-
-        // Manual Canvas
-        const canvas = document.getElementById('drawing-canvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        updateDrawingColors();
-
-        function getPos(e) { const r = canvas.getBoundingClientRect(); const x = e.touches ? e.touches[0].clientX : e.clientX; const y = e.touches ? e.touches[0].clientY : e.clientY; return { x: x - r.left, y: y - r.top }; }
-        function sDraw(e) { if (e.cancelable) e.preventDefault(); isDrawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }
-        function draw(e) { if (e.cancelable) e.preventDefault(); if (!isDrawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }
-        function eDraw(e) { if (e && e.cancelable) e.preventDefault(); isDrawing = false; }
-        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-
-        canvas.addEventListener('mousedown', sDraw); canvas.addEventListener('mousemove', draw); canvas.addEventListener('mouseup', eDraw); canvas.addEventListener('mouseout', eDraw);
-        canvas.addEventListener('touchstart', sDraw, { passive: false }); canvas.addEventListener('touchmove', draw, { passive: false }); canvas.addEventListener('touchend', eDraw, { passive: false });
-        document.getElementById('btn-clear').addEventListener('click', clearCanvas);
-
-        // --- Furigana Generator ---
-        async function initKuroshiro() {
-            if (isFuriganaReady) return;
-            showLoading('Loading Dictionary (Please wait, might be slow on first load)...');
-            try {
-                const KuroshiroClass = typeof Kuroshiro === 'function' ? Kuroshiro : Kuroshiro.default;
-                kuroshiroInstance = new KuroshiroClass();
-
-                // Wrapped in Promise.race to prevent infinite loading if browser blocks storage
-                await Promise.race([
-                    kuroshiroInstance.init(new KuromojiAnalyzer({ dictPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict" })),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error("Dictionary Timeout")), 15000))
-                ]);
-
-                isFuriganaReady = true;
-                hideLoading();
-            } catch (e) {
-                hideLoading();
-                console.error("Kuroshiro Init Error:", e);
-                document.getElementById('furi-output').innerHTML = "<span style='color:#dc2626;'>Failed to load Dictionary. Your browser's Tracking Prevention might be blocking it. Please disable it for this site and try again.</span>";
-            }
-        }
-
-        document.getElementById('btn-generate-furi').addEventListener('click', async () => {
-            const text = document.getElementById('furi-input').value;
-            if (!text) return;
-            if (!isFuriganaReady) {
-                await initKuroshiro();
-                if (!isFuriganaReady) return; // Stop if init failed
-            }
-            const outputEl = document.getElementById('furi-output');
-            outputEl.innerHTML = "Processing...";
-            try {
-                const result = await kuroshiroInstance.convert(text, { mode: "furigana", to: "hiragana" });
-                outputEl.innerHTML = result;
-            } catch (e) { outputEl.innerHTML = "Error converting text."; }
-        });
-
-        // --- Search Feature ---
-        document.getElementById('btn-search').addEventListener('click', performSearch);
-        document.getElementById('search-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') performSearch(); });
-
-        async function performSearch() {
-            const query = document.getElementById('search-input').value.trim();
-            if (!query) return;
-            switchView('search');
-            showLoading(`Searching for: ${query}...`);
-            const resArea = document.getElementById('search-results-area');
-            resArea.innerHTML = '';
-
-            try {
-                const rawUrl = 'https://jisho.org/api/v1/search/words?keyword=' + encodeURIComponent(query);
-                let response = await fetchWithTimeout(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(rawUrl)}`, { timeout: 15000 });
-                if (!response.ok) {
-                    response = await fetchWithTimeout(`https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`, { timeout: 15000 });
-                }
-                let data = await response.json();
-
-
-                if (!data.data || data.data.length === 0) {
-                    resArea.innerHTML = '<p>No results found.</p>';
-                    hideLoading(); return;
-                }
-
-                const topResults = data.data.slice(0, 2);
-                let html = '';
-
-                for (let item of topResults) {
-                    let word = item.japanese[0].word || item.japanese[0].reading;
-                    let reading = item.japanese[0].reading || '';
-                    let meanings = item.senses[0].english_definitions.join(', ');
-
-                    let sentenceHtml = '';
-                    let tatData = await fetchTatoeba(word);
-                    if (tatData && tatData.results && tatData.results.length > 0) {
-                        let match = tatData.results[0];
-                        sentenceHtml = `
-                            <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-left: 3px solid var(--primary);">
-                                <div>${match.text}</div>
-                                <div style="font-size: 0.9rem; color: var(--text-muted);">${match.translations[0][0].text}</div>
-                            </div>`;
-                    }
-
-                    html += `
-                        <div class="search-result-item">
-                            <div class="search-word">${word}</div>
-                            <div class="search-reading">${reading}</div>
-                            <div class="search-meaning">${meanings}</div>
-                            ${sentenceHtml}
-                        </div>
-                    `;
-                }
-                resArea.innerHTML = html;
-                hideLoading();
-
-            } catch (err) {
-                hideLoading();
-                resArea.innerHTML = '<p>Search error or timeout. Please try again later.</p>';
-            }
-        }
-
-        // --- Dynamic Reading & Listening (All Levels) ---
-        async function loadDynamicReadingListening(type) {
-            const container = type === 'reading' ? document.getElementById('reading-content') : document.getElementById('listening-content');
-            container.innerHTML = '<div style="text-align:center; padding: 20px;">Fetching sentences from web...</div>';
-
-            try {
-                let pool = [...kanjiList];
-                if (pool.length < 5) {
-                    let r = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/jlpt-${currentLevel === 'favorites' ? '5' : currentLevel}`);
-                    pool = await r.json();
-                }
-                shuffleArray(pool);
-
-                let sentenceData = null;
-                for (let k of pool.slice(0, 10)) {
-                    try {
-                        let wRes = await fetchWithTimeout(`https://kanjiapi.dev/v1/words/${k}`);
-                        let wData = await wRes.json();
-                        let targetWord = wData[0].variants[0].written;
-
-                        let tatData = await fetchTatoeba(targetWord);
-
-                        if (tatData && tatData.results && tatData.results.length > 0) {
-                            let match = tatData.results[0];
-                            sentenceData = {
-                                jap: match.text,
-                                eng: match.translations[0][0].text,
-                                word: targetWord
-                            };
-                            break;
-                        }
-                    } catch (e) { }
-                }
-
-                if (!sentenceData) throw new Error("Could not fetch sentence.");
-
-                if (type === 'reading') {
-                    // This block is no longer used for 'reading' view, as it's replaced by AI generation,
-                    // but we keep it safe. Listening will still use the logic below.
-                    container.innerHTML = `<div style="text-align:center;">Listening only layout now.</div>`;
-                } else {
-                    container.innerHTML = `
-                        <div style="text-align: center; margin: 30px 0;">
-                            <button class="btn-tts" style="font-size: 5rem; padding: 30px; background: var(--bg-color); border-radius: 50%; box-shadow: var(--shadow-md);" onclick="speak('${sentenceData.jap}')">🔊</button>
-                            <p style="color: var(--text-muted); margin-top: 20px;">Listen to the audio and select the correct meaning below.</p>
-                        </div>
-                        <div id="listen-opts"></div>
-                    `;
-                    let opts = [sentenceData.eng, "I like eating apples.", "It is raining today.", "Where is the train station?"];
-                    shuffleArray(opts);
-                    let optDiv = document.getElementById('listen-opts');
-                    opts.forEach(o => {
-                        let b = document.createElement('button');
-                        b.className = 'quiz-option'; b.textContent = o;
-                        b.onclick = function () {
-                            let buttons = optDiv.querySelectorAll('.quiz-option');
-                            buttons.forEach(btn => { btn.disabled = true; if (btn.textContent === sentenceData.eng) btn.classList.add('correct'); });
-                            if (o !== sentenceData.eng) b.classList.add('wrong');
-                        };
-                        optDiv.appendChild(b);
-                    });
-                }
-
-            } catch (e) {
-                container.innerHTML = '<p style="color:#dc2626;">Data fetch timeout. Please click "Next Sentence" to try again.</p>';
-            }
-        }
-
-        // --- AI Features: Reading & Grammar Tutor ---
-        let currentGeneratedJapanese = "";
-
-        async function generateAIReading(type) {
-            const container = document.getElementById('reading-content');
-            const tutorBtn = document.getElementById('btn-grammar-tutor');
-            const tutorOutput = document.getElementById('grammar-tutor-output');
-            
-            tutorBtn.style.display = 'none';
-            tutorOutput.style.display = 'none';
-            
-            // Re-init furigana if needed
-            if (!isFuriganaReady) {
-                await initKuroshiro();
-            }
-
-            container.innerHTML = '<div style="text-align:center; padding: 20px;"><div class="spinner" style="margin: 0 auto; border-top-color: var(--primary);"></div><p style="margin-top: 15px; color: var(--text-muted); font-weight: 500;">AI is writing a story for you...</p></div>';
-
-            try {
-                let prompt = "";
-                let systemInstruction = "You are an expert Japanese teacher creating reading materials for students.";
-                
-                if (type === 'level') {
-                    let lvl = currentLevel === 'favorites' ? '5' : currentLevel;
-                    prompt = `Generate a short Japanese reading passage (around 3-5 sentences) strictly using JLPT N${lvl} level grammar and vocabulary. Provide ONLY the Japanese text. Do not include english translations or romaji in your response.`;
-                } else if (type === 'topic') {
-                    const topic = document.getElementById('ai-topic-input').value.trim() || 'Japan';
-                    let lvl = currentLevel === 'favorites' ? '5' : currentLevel;
-                    prompt = `Generate a short Japanese reading passage (around 3-5 sentences) about the topic "${topic}". Keep the difficulty around JLPT N${lvl} level. Provide ONLY the Japanese text. Do not include english translations or romaji in your response.`;
-                }
-
-                currentGeneratedJapanese = await callGeminiAPI(systemInstruction, prompt);
-                let displayHtml = currentGeneratedJapanese;
-
-                if (isFuriganaReady) {
-                    try {
-                        displayHtml = await kuroshiroInstance.convert(currentGeneratedJapanese, { mode: "furigana", to: "hiragana" });
-                    } catch (e) {
-                        console.error("Furigana error", e);
-                    }
-                }
-
-                // Get english translation seamlessly
-                let engTranslation = await callGeminiAPI("You are a translator.", `Translate this Japanese text to natural English, provide ONLY the translation without any introduction:\n\n${currentGeneratedJapanese}`);
-
-                container.innerHTML = `
-                    <div class="passage-box" style="line-height: 2.2; font-size: 1.2rem;">
-                        ${displayHtml}
-                        <div class="english-translation" id="read-trans" style="display:none; font-size: 1rem; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px;">${engTranslation}</div>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 15px;">
-                        <button class="btn-action" onclick="document.getElementById('read-trans').style.display='block'">Show Meaning</button>
-                        <button class="btn-action" onclick="speak('${currentGeneratedJapanese.replace(/\n/g, ' ')}')">Listen 🔊</button>
-                    </div>
-                `;
-
-                tutorBtn.style.display = 'block';
-
-            } catch (e) {
-                container.innerHTML = `<div style="text-align:center; padding: 20px; color: #dc2626;">Failed to generate story.<br>${e.message}</div>`;
-            }
-        }
-
-        document.getElementById('btn-grammar-tutor').addEventListener('click', async () => {
-            if (!currentGeneratedJapanese) return;
-            const outputEl = document.getElementById('grammar-tutor-output');
-            outputEl.style.display = 'block';
-            outputEl.innerHTML = '<span style="color: var(--text-muted);">Analyzing grammar, verbs, and particles...</span>';
-            showLoading("AI is analyzing the grammar...");
-
-            try {
-                const prompt = `Analyze the following Japanese text. Explain the main grammar points, verb conjugations, and key particles used. Be concise but educational.\n\nText: ${currentGeneratedJapanese}`;
-                const analysis = await callGeminiAPI("You are a helpful Japanese grammar tutor.", prompt);
-                
-                // Convert markdown-like newlines/bold to basic HTML
-                let formattedAnalysis = analysis.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                outputEl.innerHTML = formattedAnalysis;
-            } catch (e) {
-                outputEl.innerHTML = `<span style="color: #dc2626;">Error: ${e.message}</span>`;
-            } finally {
-                hideLoading();
-            }
-        });
-
-        // --- AI Mistake Checker (Writing Practice) ---
-        document.getElementById('btn-check-mistakes').addEventListener('click', async () => {
-            const userInput = document.getElementById('writing-input').value.trim();
-            if (!userInput) return;
-
-            const outputEl = document.getElementById('writing-output');
-            outputEl.style.display = 'block';
-            outputEl.innerHTML = '<span style="color: var(--text-muted);">Checking for mistakes...</span>';
-            showLoading("AI is reviewing your Japanese...");
-
-            try {
-                const prompt = `Review the following Japanese text written by a student. Check for any grammar, spelling, context, or kanji usage mistakes. \n\nIf it's perfect, say "Your Japanese is perfect! 🎉". \n\nIf there are mistakes, provide:\n1. The corrected version of the text.\n2. A clear, encouraging explanation of the mistakes made.\n\nStudent's Text: ${userInput}`;
-                
-                const response = await callGeminiAPI("You are a supportive and expert Japanese language teacher.", prompt);
-                outputEl.innerHTML = response.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            } catch (e) {
-                outputEl.innerHTML = `<span style="color: #dc2626;">Error: ${e.message}</span>`;
-            } finally {
-                hideLoading();
-            }
-        });
-
-        // --- DYNAMIC QUIZ SYSTEM ---
-        document.getElementById('btn-start-quiz').addEventListener('click', () => {
-            document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-start-quiz').classList.add('active');
-
-            document.querySelectorAll('.top-nav .nav-item').forEach(nav => nav.classList.remove('active'));
-            document.querySelector('.top-nav .nav-item[data-view="kanji"]').classList.add('active');
-
-            startQuiz();
-        });
-
-        document.getElementById('btn-end-quiz').addEventListener('click', () => {
-            if (currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
-            document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
-            document.querySelector(`[data-level="${currentLevel}"]`).classList.add('active');
-            fetchLevelData(currentLevel);
-        });
-
-        async function startQuiz() {
-            if (currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
-
-            if (kanjiList.length < 5) {
-                let res = await fetchWithTimeout('https://kanjiapi.dev/v1/kanji/jlpt-5');
-                kanjiList = await res.json();
-                shuffleArray(kanjiList);
-            }
-
-            Object.values(containers).forEach(c => c.classList.remove('active-section'));
-            containers.quiz.classList.add('active-section');
-            settingsBar.style.display = 'none';
-
-            document.getElementById('quiz-active-area').style.display = 'block';
-            document.getElementById('quiz-result-area').style.display = 'none';
-
-            quizScore = 0;
-            currentQuizIndex = 0;
-            quizQuestions = [];
-
-            showLoading('Generating quiz questions, please wait...');
-
-            try {
-                let pool = [...kanjiList];
-                shuffleArray(pool);
-                let targets = pool.slice(0, 15);
-
-                let wrongKanjiPool = pool.slice(15, 30);
-                let wrongReadingsPool = [];
-                await Promise.all(wrongKanjiPool.map(async (k) => {
-                    try {
-                        let res = await fetchWithTimeout(`https://kanjiapi.dev/v1/kanji/${k}`);
-                        let d = await res.json();
-                        if (d.kun_readings && d.kun_readings.length > 0) wrongReadingsPool.push(d.kun_readings[0]);
-                        if (d.on_readings && d.on_readings.length > 0) wrongReadingsPool.push(d.on_readings[0]);
-                    } catch (e) { }
-                }));
-                wrongReadingsPool = wrongReadingsPool.filter(r => r && r !== '-' && !r.includes('.'));
-
-                for (let targetKanji of targets) {
-                    if (quizQuestions.length >= 5) break;
-
-                    try {
-                        let wordRes = await fetchWithTimeout(`https://kanjiapi.dev/v1/words/${targetKanji}`);
-                        let wordData = await wordRes.json();
-
-                        let commonWords = wordData.filter(w => w.variants.some(v => v.priorities && v.priorities.length > 0));
-                        let selectedWordObj = (commonWords.length > 0 ? commonWords[0] : wordData[0]);
-
-                        if (!selectedWordObj) continue;
-
-                        let targetWord = selectedWordObj.variants[0].written;
-                        let correctReading = selectedWordObj.variants[0].pronounced;
-                        let meaningHint = selectedWordObj.meanings[0].glosses.join(', ');
-
-                        let sentence = targetWord;
-                        let audioUrl = null;
-
-                        let tatData = await fetchTatoeba(targetWord);
-                        if (tatData && tatData.results && tatData.results.length > 0) {
-                            let match = tatData.results.find(r => r.text.includes(targetWord)) || tatData.results[0];
-                            sentence = match.text;
-
-                            if (match.translations && match.translations[0] && match.translations[0][0]) {
-                                meaningHint = match.translations[0][0].text;
-                            }
-                            if (match.audios && match.audios.length > 0) {
-                                audioUrl = `https://tatoeba.org/en/audio/download/${match.audios[0].id}`;
-                            }
-                        }
-
-                        let options = [correctReading];
-                        let shuffledWrong = [...wrongReadingsPool];
-                        shuffleArray(shuffledWrong);
-
-                        for (let wr of shuffledWrong) {
-                            if (options.length >= 4) break;
-                            if (!options.includes(wr) && wr !== correctReading) options.push(wr);
-                        }
-
-                        while (options.length < 4) {
-                            options.push("ちがう" + Math.floor(Math.random() * 100));
-                        }
-                        shuffleArray(options);
-
-                        quizQuestions.push({
-                            targetWord: targetWord,
-                            sentence: sentence,
-                            meaningHint: meaningHint,
-                            correct: correctReading,
-                            options: options,
-                            audioUrl: audioUrl
-                        });
-
-                    } catch (e) {
-                        console.log("Error processing kanji:", targetKanji);
-                    }
-                }
-
-                if (quizQuestions.length === 0) throw new Error("Could not generate questions.");
-
-                hideLoading();
-                renderQuizQuestion();
-
-            } catch (e) {
-                console.error(e);
-                alert('Error generating quiz. Please try again.');
-                setTimeout(hideLoading, 3000);
-            }
-        }
-
-        function renderQuizQuestion() {
-            if (currentAudioObj) { currentAudioObj.pause(); currentAudioObj = null; }
-
-            if (currentQuizIndex >= quizQuestions.length) {
-                showQuizResults();
-                return;
-            }
-
-            const q = quizQuestions[currentQuizIndex];
-            document.getElementById('quiz-qnum').textContent = `Question ${currentQuizIndex + 1}/${quizQuestions.length}`;
-
-            const sentenceTextEl = document.getElementById('quiz-sentence-text');
-            const meaningHintEl = document.getElementById('quiz-meaning-hint');
-            const audioBtn = document.getElementById('quiz-audio-btn');
-
-            let formattedSentence = q.sentence.split(q.targetWord).join(`<span class="highlight">${q.targetWord}</span>`);
-            if (!formattedSentence.includes('highlight')) {
-                formattedSentence = q.sentence;
-            }
-
-            sentenceTextEl.innerHTML = formattedSentence;
-            meaningHintEl.textContent = q.meaningHint;
-
-            audioBtn.onclick = () => {
-                if (q.audioUrl) {
-                    if (currentAudioObj) currentAudioObj.pause();
-                    currentAudioObj = new Audio(q.audioUrl);
-                    currentAudioObj.play().catch(() => speak(q.sentence));
-                } else {
-                    speak(q.sentence);
-                }
-            };
-
-            const optionsBox = document.getElementById('quiz-options');
-            optionsBox.innerHTML = '';
-
-            q.options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'quiz-option';
-                btn.textContent = opt;
-                btn.onclick = () => handleQuizAnswer(btn, opt, q.correct);
-                optionsBox.appendChild(btn);
-            });
-        }
-
-        function handleQuizAnswer(btnNode, selected, correct) {
-            const buttons = document.querySelectorAll('.quiz-option');
-            buttons.forEach(b => {
-                b.disabled = true;
-                if (b.textContent === correct) b.classList.add('correct');
-            });
-
-            if (selected === correct) {
-                quizScore++;
-            } else {
-                btnNode.classList.add('wrong');
-            }
-
-            setTimeout(() => {
-                currentQuizIndex++;
-                renderQuizQuestion();
-            }, 1200);
-        }
-
-        function showQuizResults() {
-            document.getElementById('quiz-active-area').style.display = 'none';
-            document.getElementById('quiz-result-area').style.display = 'block';
-            document.getElementById('quiz-final-score').textContent = `${quizScore}/${quizQuestions.length}`;
-
-            const feedback = document.getElementById('quiz-feedback');
-            if (quizScore === quizQuestions.length) feedback.textContent = 'Perfect score! Subarashii! 🎉';
-            else if (quizScore >= 3) feedback.textContent = 'Good job! Keep practicing! 👍';
-            else feedback.textContent = 'Don\'t give up! Ganbatte! 💪';
-        }
-
-        // Start App
-        fetchLevelData('5');
-
-    </script>
+    </section>
+
+    <!-- ── 6. SEARCH RESULTS ── -->
+    <section class="section" id="sec-search">
+        <div id="search-results"></div>
+    </section>
+
+</main>
+
+<!-- HanziWriter CDN -->
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<!-- App logic -->
+<script src="script.js"></script>
 </body>
-
 </html>

@@ -1,0 +1,182 @@
+{
+  "5": [
+    {
+      "title": "私の一日 (My Day)",
+      "jap": "<ruby>毎朝<rt>まいあさ</rt></ruby>、<ruby>七時<rt>しちじ</rt></ruby>に<ruby>起<rt>お</rt></ruby>きます。シャワーを<ruby>浴<rt>あ</rt></ruby>びてから、<ruby>朝<rt>あさ</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。<ruby>朝<rt>あさ</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>はパンとコーヒーです。<ruby>八時<rt>はちじ</rt></ruby>に<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>て、<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>会社<rt>かいしゃ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。<ruby>会社<rt>かいしゃ</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>から<ruby>五時<rt>ごじ</rt></ruby>までです。",
+      "eng": "Every morning, I wake up at 7 o'clock. After taking a shower, I eat breakfast. Breakfast is bread and coffee. I leave home at 8 o'clock and go to the office by train. The office is from 9 to 5.",
+      "grammar": [
+        "〜てから: After doing~ (e.g., シャワーを浴びてから = after taking a shower)",
+        "〜から〜まで: From ~ to ~ (e.g., 九時から五時まで = from 9 to 5)",
+        "〜で: By means of (e.g., 電車で = by train)"
+      ]
+    },
+    {
+      "title": "私の部屋 (My Room)",
+      "jap": "<ruby>私<rt>わたし</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>はあまり<ruby>大<rt>おお</rt></ruby>きくないですが、きれいです。<ruby>窓<rt>まど</rt></ruby>の<ruby>隣<rt>となり</rt></ruby>に<ruby>机<rt>つくえ</rt></ruby>があります。<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>やパソコンがあります。<ruby>壁<rt>かべ</rt></ruby>に<ruby>日本<rt>にほん</rt></ruby>の<ruby>地図<rt>ちず</rt></ruby>が<ruby>貼<rt>は</rt></ruby>ってあります。<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は、よく<ruby>部屋<rt>へや</rt></ruby>で<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>きます。",
+      "eng": "My room is not very large, but it is clean. There is a desk next to the window. There are books and a computer on the desk. A map of Japan is pasted on the wall. On days off, I often listen to music in my room.",
+      "grammar": [
+        "〜てあります: Something has been done (resultant state, e.g., 地図が貼ってあります = a map is pasted)",
+        "〜の隣に: Next to ~ (location marker)",
+        "よく〜ます: I often do ~"
+      ]
+    },
+    {
+      "title": "田中さんの家族 (Tanaka's Family)",
+      "jap": "<ruby>田中<rt>たなか</rt></ruby>さんの<ruby>家族<rt>かぞく</rt></ruby>は<ruby>五人<rt>ごにん</rt></ruby>です。お<ruby>父<rt>とう</rt></ruby>さんとお<ruby>母<rt>かあ</rt></ruby>さんと、お<ruby>兄<rt>にい</rt></ruby>さんと<ruby>妹<rt>いもうと</rt></ruby>さんがいます。<ruby>田中<rt>たなか</rt></ruby>さんのお<ruby>父<rt>とう</rt></ruby>さんは<ruby>医者<rt>いしゃ</rt></ruby>です。お<ruby>母<rt>かあ</rt></ruby>さんは<ruby>料理<rt>りょうり</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>です。<ruby>家族<rt>かぞく</rt></ruby>みんなで<ruby>週末<rt>しゅうまつ</rt></ruby>に<ruby>公園<rt>こうえん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くのが<ruby>好<rt>す</rt></ruby>きです。",
+      "eng": "Tanaka's family has five members. There is a father, mother, older brother, and younger sister. Tanaka's father is a doctor. The mother is good at cooking. The whole family likes going to the park on weekends.",
+      "grammar": [
+        "〜が上手です: To be good at ~",
+        "〜がいます: (Animate) existence marker",
+        "〜のが好きです: Like doing ~"
+      ]
+    },
+    {
+      "title": "日本の食べ物 (Japanese Food)",
+      "jap": "<ruby>日本<rt>にほん</rt></ruby>には<ruby>美味<rt>おい</rt></ruby>しい<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>がたくさんあります。<ruby>寿司<rt>すし</rt></ruby>、ラーメン、<ruby>天<rt>てん</rt></ruby>ぷらなどが<ruby>有名<rt>ゆうめい</rt></ruby>です。<ruby>私<rt>わたし</rt></ruby>は<ruby>寿司<rt>すし</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>好<rt>す</rt></ruby>きです。<ruby>先週<rt>せんしゅう</rt></ruby>、<ruby>友達<rt>ともだち</rt></ruby>と<ruby>寿司屋<rt>すしや</rt></ruby>に<ruby>行<rt>い</rt></ruby>きました。とても<ruby>美味<rt>おい</rt></ruby>しかったです。また<ruby>行<rt>い</rt></ruby>きたいです。",
+      "eng": "There is lots of delicious food in Japan. Sushi, ramen, and tempura are famous. I like sushi the best. Last week, I went to a sushi restaurant with a friend. It was very delicious. I want to go again.",
+      "grammar": [
+        "〜が一番好き: Like ~ the most",
+        "〜など: Things like ~, and so on",
+        "また〜たいです: I want to do ~ again"
+      ]
+    },
+    {
+      "title": "週末の予定 (Weekend Plans)",
+      "jap": "今<ruby>週<rt>しゅう</rt></ruby>の<ruby>土曜日<rt>どようび</rt></ruby>は<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>予定<rt>よてい</rt></ruby>です。<ruby>友達<rt>ともだち</rt></ruby>が<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたいと<ruby>言<rt>い</rt></ruby>いました。<ruby>映画<rt>えいが</rt></ruby>の<ruby>後<rt>あと</rt></ruby>で、レストランで<ruby>晩<rt>ばん</rt></ruby>ご<ruby>飯<rt>はん</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。<ruby>日曜日<rt>にちようび</rt></ruby>は<ruby>家<rt>いえ</rt></ruby>でゆっくり<ruby>休<rt>やす</rt></ruby>みます。<ruby>月曜日<rt>げつようび</rt></ruby>からまた<ruby>仕事<rt>しごと</rt></ruby>です。",
+      "eng": "This Saturday, I plan to watch a movie. My friend said they want to come together. After the movie, we will eat dinner at a restaurant. On Sunday, I will rest at home slowly. From Monday, it is work again.",
+      "grammar": [
+        "〜予定です: I plan to ~",
+        "〜と言いました: Said that ~ (reported speech)",
+        "〜の後で: After ~"
+      ]
+    }
+  ],
+  "4": [
+    {
+      "title": "夢の仕事 (Dream Job)",
+      "jap": "<ruby>子供<rt>こども</rt></ruby>のころ、<ruby>私<rt>わたし</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>はパイロットになることでした。<ruby>空<rt>そら</rt></ruby>を<ruby>飛<rt>と</rt></ruby>ぶのが<ruby>大好<rt>だいす</rt></ruby>きだったからです。でも、<ruby>今<rt>いま</rt></ruby>は<ruby>別<rt>べつ</rt></ruby>の<ruby>仕事<rt>しごと</rt></ruby>をしています。エンジニアとして<ruby>働<rt>はたら</rt></ruby>いていますが、それも<ruby>楽<rt>たの</rt></ruby>しいと<ruby>思<rt>おも</rt></ruby>っています。<ruby>将来<rt>しょうらい</rt></ruby>、<ruby>自分<rt>じぶん</rt></ruby>の<ruby>会社<rt>かいしゃ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りたいと<ruby>思<rt>おも</rt></ruby>っています。",
+      "eng": "When I was a child, my dream was to become a pilot. That's because I loved flying in the sky. But now, I'm doing a different job. I work as an engineer, but I think that is also enjoyable. In the future, I want to build my own company.",
+      "grammar": [
+        "〜ことでした: Was (the fact of) ~ (nominalizer with こと)",
+        "〜から: Because ~ (reason clause)",
+        "〜として: As ~ (in the role of)"
+      ]
+    },
+    {
+      "title": "日本語の勉強 (Studying Japanese)",
+      "jap": "<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>し<ruby>始<rt>はじ</rt></ruby>めてから、もう<ruby>二年<rt>にねん</rt></ruby>が<ruby>経<rt>た</rt></ruby>ちます。<ruby>最初<rt>さいしょ</rt></ruby>は<ruby>発音<rt>はつおん</rt></ruby>が<ruby>難<rt>むずか</rt></ruby>しくて<ruby>困<rt>こま</rt></ruby>りました。<ruby>今<rt>いま</rt></ruby>は<ruby>少<rt>すこ</rt></ruby>し<ruby>話<rt>はな</rt></ruby>せるようになりましたが、<ruby>漢字<rt>かんじ</rt></ruby>がまだ<ruby>苦手<rt>にがて</rt></ruby>です。<ruby>毎日<rt>まいにち</rt></ruby><ruby>少<rt>すこ</rt></ruby>しずつ<ruby>練習<rt>れんしゅう</rt></ruby>するのが<ruby>一番<rt>いちばん</rt></ruby><ruby>大切<rt>たいせつ</rt></ruby>だと<ruby>思<rt>おも</rt></ruby>います。",
+      "eng": "It has been two years since I started studying Japanese. At first, I had trouble because the pronunciation was difficult. Now I've become able to speak a little, but I'm still not good at kanji. I think practicing a little every day is the most important thing.",
+      "grammar": [
+        "〜てから〜が経つ: After doing ~, time has passed",
+        "〜ようになりました: Has come to be able to ~",
+        "〜のが一番大切: Doing ~ is the most important"
+      ]
+    },
+    {
+      "title": "健康のために (For Your Health)",
+      "jap": "<ruby>健康<rt>けんこう</rt></ruby>のために<ruby>毎日<rt>まいにち</rt></ruby><ruby>運動<rt>うんどう</rt></ruby>することが<ruby>大切<rt>たいせつ</rt></ruby>です。<ruby>私<rt>わたし</rt></ruby>は<ruby>朝<rt>あさ</rt></ruby>、<ruby>三十分<rt>さんじゅっぷん</rt></ruby>ジョギングをします。<ruby>最初<rt>さいしょ</rt></ruby>はとても<ruby>辛<rt>つら</rt></ruby>かったですが、<ruby>続<rt>つづ</rt></ruby>けているうちに<ruby>慣<rt>な</rt></ruby>れてきました。<ruby>食事<rt>しょくじ</rt></ruby>も<ruby>気<rt>き</rt></ruby>をつけるようにしています。<ruby>野菜<rt>やさい</rt></ruby>をたくさん<ruby>食<rt>た</rt></ruby>べて、<ruby>油<rt>あぶら</rt></ruby>っぽいものを<ruby>減<rt>へ</rt></ruby>らしました。",
+      "eng": "For the sake of health, it's important to exercise every day. In the morning, I jog for thirty minutes. At first it was very tough, but I got used to it as I kept going. I'm also trying to be careful about my diet. I eat a lot of vegetables and have reduced oily foods.",
+      "grammar": [
+        "〜ているうちに: While doing ~ (gradual change)",
+        "〜ようにしています: I try to do ~",
+        "〜を減らす: To reduce ~"
+      ]
+    },
+    {
+      "title": "旅行の計画 (Travel Plans)",
+      "jap": "<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>京都<rt>きょうと</rt></ruby>と<ruby>大阪<rt>おおさか</rt></ruby>を<ruby>旅行<rt>りょこう</rt></ruby>するつもりです。<ruby>京都<rt>きょうと</rt></ruby>には<ruby>有名<rt>ゆうめい</rt></ruby>なお<ruby>寺<rt>てら</rt></ruby>やお<ruby>城<rt>しろ</rt></ruby>がたくさんあります。<ruby>大阪<rt>おおさか</rt></ruby>では<ruby>美味<rt>おい</rt></ruby>しい<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>をたくさん<ruby>食<rt>た</rt></ruby>べたいと<ruby>思<rt>おも</rt></ruby>っています。<ruby>友達<rt>ともだち</rt></ruby>が<ruby>地元<rt>じもと</rt></ruby>なので、いろいろな<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>連<rt>つ</rt></ruby>れて<ruby>行<rt>い</rt></ruby>ってくれると<ruby>言<rt>い</rt></ruby>っています。",
+      "eng": "I intend to travel to Kyoto and Osaka during summer vacation. Kyoto has many famous temples and castles. In Osaka, I'm thinking I want to eat a lot of delicious food. Since my friend is a local, they say they'll take me to various places.",
+      "grammar": [
+        "〜つもりです: I intend to ~",
+        "〜と思っています: I am thinking/planning to ~",
+        "〜てくれる: To do for me (speaker's benefit)"
+      ]
+    },
+    {
+      "title": "失敗から学ぶ (Learning from Failure)",
+      "jap": "<ruby>先月<rt>せんげつ</rt></ruby>、<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>発表<rt>はっぴょう</rt></ruby>でミスをしてしまいました。<ruby>準備<rt>じゅんび</rt></ruby>が<ruby>足<rt>た</rt></ruby>りなかったせいで、うまく<ruby>話<rt>はな</rt></ruby>せませんでした。<ruby>上司<rt>じょうし</rt></ruby>に<ruby>後<rt>あと</rt></ruby>で「<ruby>失敗<rt>しっぱい</rt></ruby>は<ruby>経験<rt>けいけん</rt></ruby>だ」と<ruby>言<rt>い</rt></ruby>われました。その<ruby>言葉<rt>ことば</rt></ruby>が<ruby>今<rt>いま</rt></ruby>も<ruby>心<rt>こころ</rt></ruby>に<ruby>残<rt>のこ</rt></ruby>っています。これからは、もっとしっかり<ruby>準備<rt>じゅんび</rt></ruby>しようと<ruby>思<rt>おも</rt></ruby>います。",
+      "eng": "Last month, I made a mistake during an important presentation. Because my preparation wasn't enough, I couldn't speak well. Later, my boss told me 'failure is experience.' Those words still remain in my heart. From now on, I will prepare more thoroughly.",
+      "grammar": [
+        "〜せいで: Due to ~ (negative cause)",
+        "〜に〜と言われる: To be told ~ by ~",
+        "〜しようと思います: I intend to do ~"
+      ]
+    }
+  ],
+  "3": [
+    {
+      "title": "テクノロジーと社会 (Technology and Society)",
+      "jap": "スマートフォンの<ruby>普及<rt>ふきゅう</rt></ruby>により、<ruby>人々<rt>ひとびと</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きく<ruby>変<rt>か</rt></ruby>わりました。<ruby>情報<rt>じょうほう</rt></ruby>へのアクセスが<ruby>容易<rt>ようい</rt></ruby>になった<ruby>一方<rt>いっぽう</rt></ruby>で、SNS<ruby>依存<rt>いぞん</rt></ruby>や<ruby>睡眠<rt>すいみん</rt></ruby><ruby>不足<rt>ふそく</rt></ruby>などの<ruby>問題<rt>もんだい</rt></ruby>も<ruby>生<rt>しょう</rt></ruby>じています。テクノロジーを<ruby>上手<rt>うまく</rt></ruby>に<ruby>活用<rt>かつよう</rt></ruby>するためには、<ruby>自分<rt>じぶん</rt></ruby>でルールを<ruby>作<rt>つく</rt></ruby>って<ruby>管理<rt>かんり</rt></ruby>することが<ruby>重要<rt>じゅうよう</rt></ruby>です。",
+      "eng": "With the spread of smartphones, people's lives have changed greatly. While access to information has become easier, problems such as social media addiction and lack of sleep have also arisen. To make good use of technology, it is important to set your own rules and manage yourself.",
+      "grammar": [
+        "〜により: Due to ~ / as a result of ~ (formal)",
+        "〜一方で: On the other hand ~",
+        "〜ためには: In order to ~"
+      ]
+    },
+    {
+      "title": "読書の勧め (The Value of Reading)",
+      "jap": "<ruby>読書<rt>どくしょ</rt></ruby>は<ruby>知識<rt>ちしき</rt></ruby>を<ruby>広<rt>ひろ</rt></ruby>げると<ruby>同時<rt>どうじ</rt></ruby>に、<ruby>想像力<rt>そうぞうりょく</rt></ruby>や<ruby>集中力<rt>しゅうちゅうりょく</rt></ruby>を<ruby>鍛<rt>きた</rt></ruby>える<ruby>効果<rt>こうか</rt></ruby>があります。<ruby>特<rt>とく</rt></ruby>に<ruby>小説<rt>しょうせつ</rt></ruby>は、<ruby>他者<rt>たしゃ</rt></ruby>の<ruby>視点<rt>してん</rt></ruby>を<ruby>体験<rt>たいけん</rt></ruby>できる<ruby>貴重<rt>きちょう</rt></ruby>な<ruby>機会<rt>きかい</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えてくれます。<ruby>忙<rt>いそが</rt></ruby>しい<ruby>日々<rt>ひび</rt></ruby>の<ruby>中<rt>なか</rt></ruby>でも、<ruby>少<rt>すこ</rt></ruby>しの<ruby>時間<rt>じかん</rt></ruby>を<ruby>読書<rt>どくしょ</rt></ruby>に<ruby>充<rt>あ</rt></ruby>てることで、<ruby>精神的<rt>せいしんてき</rt></ruby>な<ruby>豊<rt>ゆた</rt></ruby>かさを<ruby>保<rt>たも</rt></ruby>つことができます。",
+      "eng": "Reading not only broadens knowledge but also has the effect of training imagination and concentration. Novels in particular provide a precious opportunity to experience another person's perspective. Even in busy days, by devoting a little time to reading, you can maintain spiritual richness.",
+      "grammar": [
+        "〜と同時に: At the same time as ~",
+        "〜てくれる: (Something) does ~ for you",
+        "〜ことができます: Is able to ~"
+      ]
+    },
+    {
+      "title": "環境問題 (Environmental Issues)",
+      "jap": "<ruby>地球温暖化<rt>ちきゅうおんだんか</rt></ruby>は<ruby>現代社会<rt>げんだいしゃかい</rt></ruby>が<ruby>直面<rt>ちょくめん</rt></ruby>している<ruby>最<rt>もっと</rt></ruby>も<ruby>深刻<rt>しんこく</rt></ruby>な<ruby>問題<rt>もんだい</rt></ruby>の<ruby>一<rt>ひと</rt></ruby>つです。<ruby>化石燃料<rt>かせきねんりょう</rt></ruby>の<ruby>使用<rt>しよう</rt></ruby>を<ruby>減<rt>へ</rt></ruby>らし、<ruby>再生可能<rt>さいせいかのう</rt></ruby>エネルギーへの<ruby>移行<rt>いこう</rt></ruby>を<ruby>進<rt>すす</rt></ruby>める<ruby>必要<rt>ひつよう</rt></ruby>があります。<ruby>個人<rt>こじん</rt></ruby>レベルでも、ゴミの<ruby>削減<rt>さくげん</rt></ruby>やリサイクルを<ruby>積極的<rt>せっきょくてき</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>うことが<ruby>求<rt>もと</rt></ruby>められています。",
+      "eng": "Global warming is one of the most serious problems facing modern society. It is necessary to reduce the use of fossil fuels and promote a shift to renewable energy. Even at the individual level, proactive garbage reduction and recycling are required.",
+      "grammar": [
+        "〜の一つ: One of ~",
+        "〜必要があります: There is a need to ~",
+        "〜が求められています: Is being required/demanded"
+      ]
+    }
+  ],
+  "2": [
+    {
+      "title": "グローバル化の影響 (Impact of Globalization)",
+      "jap": "グローバル化が<ruby>急速<rt>きゅうそく</rt></ruby>に<ruby>進<rt>すす</rt></ruby>む<ruby>中<rt>なか</rt></ruby>で、<ruby>異文化間<rt>いぶんかかん</rt></ruby>の<ruby>交流<rt>こうりゅう</rt></ruby>はかつてないほど<ruby>活発<rt>かっぱつ</rt></ruby>になっています。<ruby>一方<rt>いっぽう</rt></ruby>では<ruby>多様性<rt>たようせい</rt></ruby>の<ruby>尊重<rt>そんちょう</rt></ruby>が<ruby>叫<rt>さけ</rt></ruby>ばれる<ruby>反面<rt>はんめん</rt></ruby>、<ruby>文化的<rt>ぶんかてき</rt></ruby>アイデンティティの<ruby>喪失<rt>そうしつ</rt></ruby>を<ruby>懸念<rt>けねん</rt></ruby>する<ruby>声<rt>こえ</rt></ruby>も<ruby>少<rt>すく</rt></ruby>なくありません。この<ruby>複雑<rt>ふくざつ</rt></ruby>な<ruby>問題<rt>もんだい</rt></ruby>に<ruby>対応<rt>たいおう</rt></ruby>するためには、<ruby>柔軟<rt>じゅうなん</rt></ruby>な<ruby>思考<rt>しこう</rt></ruby>と<ruby>深<rt>ふか</rt></ruby>い<ruby>自己理解<rt>じこりかい</rt></ruby>が<ruby>不可欠<rt>ふかけつ</rt></ruby>です。",
+      "eng": "As globalization advances rapidly, cross-cultural exchanges have become more active than ever. On the one hand, respect for diversity is being called for, while on the other, there are many voices concerned about the loss of cultural identity. To address this complex issue, flexible thinking and deep self-understanding are indispensable.",
+      "grammar": [
+        "〜中で: In the midst of ~",
+        "〜反面: While on one hand ~ (contrast)",
+        "〜が不可欠です: ~ is indispensable"
+      ]
+    },
+    {
+      "title": "少子化問題 (The Issue of Declining Birth Rate)",
+      "jap": "<ruby>日本<rt>にほん</rt></ruby>では<ruby>少子化<rt>しょうしか</rt></ruby>が<ruby>深刻<rt>しんこく</rt></ruby>な<ruby>社会問題<rt>しゃかいもんだい</rt></ruby>となっており、<ruby>経済<rt>けいざい</rt></ruby>や<ruby>社会保障制度<rt>しゃかいほしょうせいど</rt></ruby>に<ruby>多大<rt>ただい</rt></ruby>な<ruby>影響<rt>えいきょう</rt></ruby>を<ruby>与<rt>あた</rt></ruby>えています。<ruby>政府<rt>せいふ</rt></ruby>は<ruby>様々<rt>さまざま</rt></ruby>な<ruby>対策<rt>たいさく</rt></ruby>を<ruby>講<rt>こう</rt></ruby>じているものの、<ruby>根本的<rt>こんぽんてき</rt></ruby>な<ruby>解決<rt>かいけつ</rt></ruby>には<ruby>至<rt>いた</rt></ruby>っていないのが<ruby>現状<rt>げんじょう</rt></ruby>です。<ruby>若者<rt>わかもの</rt></ruby>が<ruby>安心<rt>あんしん</rt></ruby>して<ruby>子育<rt>こそだ</rt></ruby>てできる<ruby>環境<rt>かんきょう</rt></ruby>づくりが<ruby>急務<rt>きゅうむ</rt></ruby>とされています。",
+      "eng": "In Japan, the declining birth rate has become a serious social problem, having a great impact on the economy and social security systems. Although the government has implemented various measures, the current situation is that a fundamental solution has not been reached. Creating an environment where young people can raise children with peace of mind is said to be an urgent need.",
+      "grammar": [
+        "〜ものの: Although ~ (concessive contrast)",
+        "〜が現状です: The current reality is ~",
+        "〜とされています: Is said to be ~ / is considered to be ~"
+      ]
+    }
+  ],
+  "1": [
+    {
+      "title": "AI社会の倫理 (Ethics in an AI Society)",
+      "jap": "<ruby>人工知能<rt>じんこうちのう</rt></ruby>の<ruby>急速<rt>きゅうそく</rt></ruby>な<ruby>発展<rt>はってん</rt></ruby>に<ruby>伴<rt>ともな</rt></ruby>い、われわれは<ruby>技術倫理<rt>ぎじゅつりんり</rt></ruby>という<ruby>新<rt>あら</rt></ruby>たな<ruby>命題<rt>めいだい</rt></ruby>に<ruby>直面<rt>ちょくめん</rt></ruby>している。AIが<ruby>人間<rt>にんげん</rt></ruby>の<ruby>判断<rt>はんだん</rt></ruby>を<ruby>補完<rt>ほかん</rt></ruby>する<ruby>段階<rt>だんかい</rt></ruby>を<ruby>超<rt>こ</rt></ruby>え、<ruby>代替<rt>だいたい</rt></ruby>しうる<ruby>水準<rt>すいじゅん</rt></ruby>に<ruby>達<rt>たっ</rt></ruby>しつつある<ruby>今<rt>いま</rt></ruby>、その<ruby>責任<rt>せきにん</rt></ruby>の<ruby>所在<rt>しょざい</rt></ruby>を<ruby>明確<rt>めいかく</rt></ruby>にするための<ruby>法整備<rt>ほうせいび</rt></ruby>が<ruby>喫緊<rt>きっきん</rt></ruby>の<ruby>課題<rt>かだい</rt></ruby>となっている。",
+      "eng": "With the rapid development of artificial intelligence, we are confronted with a new proposition called technological ethics. Now that AI is reaching a level where it can not only supplement but substitute human judgment, establishing laws to clarify where responsibility lies has become an urgent issue.",
+      "grammar": [
+        "〜に伴い: Accompanied by ~ (formal written form)",
+        "〜つつある: In the process of becoming ~ (literary)",
+        "〜ことなく: Without doing ~ (formal)"
+      ]
+    },
+    {
+      "title": "都市集中の弊害 (Harms of Urban Concentration)",
+      "jap": "<ruby>三大都市圏<rt>さんだいとしけん</rt></ruby>への<ruby>人口集中<rt>じんこうしゅうちゅう</rt></ruby>は、<ruby>地方<rt>ちほう</rt></ruby>の<ruby>過疎化<rt>かそか</rt></ruby>と<ruby>都市<rt>とし</rt></ruby>のインフラ<ruby>老朽化<rt>ろうきゅうか</rt></ruby>という<ruby>二<rt>ふた</rt></ruby>つの<ruby>問題<rt>もんだい</rt></ruby>を<ruby>同時<rt>どうじ</rt></ruby>に<ruby>引<rt>ひ</rt></ruby>き<ruby>起<rt>おこ</rt></ruby>こしている。<ruby>都市機能<rt>としきのう</rt></ruby>の<ruby>分散<rt>ぶんさん</rt></ruby>と<ruby>地方創生<rt>ちほうそうせい</rt></ruby>への<ruby>取<rt>と</rt></ruby>り<ruby>組<rt>く</rt></ruby>みが<ruby>叫<rt>さけ</rt></ruby>ばれて<ruby>久<rt>ひさ</rt></ruby>しいが、<ruby>実効性<rt>じっこうせい</rt></ruby>ある<ruby>政策<rt>せいさく</rt></ruby>の<ruby>実現<rt>じつげん</rt></ruby>は<ruby>依然<rt>いぜん</rt></ruby>として<ruby>困難<rt>こんなん</rt></ruby>に<ruby>直面<rt>ちょくめん</rt></ruby>している。",
+      "eng": "The concentration of population in the three major metropolitan areas is simultaneously causing two problems: depopulation in rural areas and aging infrastructure in cities. Appeals for dispersing urban functions and regional revitalization have been heard for a long time, but realizing effective policies still faces difficulties.",
+      "grammar": [
+        "〜久しい: Has been ~ for a long time (literary adjective)",
+        "〜であろう: Formal conjecture (will probably be ~)",
+        "〜に直面している: Is facing / confronting ~"
+      ]
+    }
+  ]
+}
